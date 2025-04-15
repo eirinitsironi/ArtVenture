@@ -16,30 +16,29 @@ public class Quiz {
     }
 
     public void generateQuiz() {
-        System.out.println("Welcome to the Preferences Quiz!");
-        Scanner scanner = new Scanner(System.in);   //with GUI we need buttons instead 
-       
-        for (Question q : questions) {
-            System.out.println(q.getText());
-            List<String> options = q.getOptions();
+        System.out.println("\nWelcome to the Preferences Quiz!\n");
+        
+        try (Scanner scanner = new Scanner(System.in)) {       //with GUI we need buttons instead 
+            for (Question q : questions) {
+                System.out.println(q.getText());
+                List<String> options = q.getOptions();
             
-            for (int i = 0; i < options.size(); i++) {
-                System.out.println((i + 1) + ". " + options.get(i));
-            }
+                for (int i = 0; i < options.size(); i++) {
+                    System.out.println((i + 1) + ". " + options.get(i));
+                }
 
-            System.out.print("Choice 1-4: ");
-            int choice = scanner.nextInt();
-            if (choice >= 1 && choice <= 4) {
-                recordAnswer(options.get(choice - 1)); 
-            }
-            else {
-                System.out.println("Invalid choice. Quitting Quiz.");
-                saveProgress();
-                return;
+                System.out.print("Choice 1-4: ");
+                int choice = scanner.nextInt();
+                if (choice >= 1 && choice <= 4) {
+                    recordAnswer(options.get(choice - 1)); 
+                }
+                else {
+                    System.out.println("Invalid choice. Quitting Quiz.");
+                    saveProgress();
+                    return;
+                }
             }
         }
-        
-        scanner.close();
     }
 
     private void recordAnswer(String answer) {

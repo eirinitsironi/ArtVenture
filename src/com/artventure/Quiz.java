@@ -30,15 +30,16 @@ public class Quiz {
             System.out.print("Choice 1-4: ");
             int choice = scanner.nextInt();
             if (choice >= 1 && choice <= 4) {
-                recordAnswer(options.get(choice -1)); 
+                recordAnswer(options.get(choice - 1)); 
             }
             else {
                 System.out.println("Invalid choice. Quitting Quiz.");
                 saveProgress();
                 return;
             }
-            scanner.close();
         }
+        
+        scanner.close();
     }
 
     private void recordAnswer(String answer) {

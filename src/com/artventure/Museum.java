@@ -1,4 +1,7 @@
-public class Museum {
+import java.io.Serializable;
+
+public class Museum implements Serializable{
+    private static final long serialVersionUID = 1L;
     private int museumID;
     private String name;
     private String description;

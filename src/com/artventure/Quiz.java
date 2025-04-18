@@ -1,5 +1,5 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Quiz implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -17,10 +17,8 @@ public class Quiz implements Serializable {
         this.recommendedMuseums = new ArrayList<>();    //ready empty list for the recommended museums
     }
 
-    public void generateQuiz() {
+    public void generateQuiz(Scanner scanner) {
         System.out.println("\nWelcome to the Preferences Quiz!");
-        
-        try (Scanner scanner = new Scanner(System.in)) {    //with GUI we need buttons instead 
             for (int i = answers.size(); i < questions.size(); i++) {
                 Question q = questions.get(i);
                 System.out.println("\nQuestion " + (i + 1) + ": " + q.getText());
@@ -32,20 +30,22 @@ public class Quiz implements Serializable {
     
                 System.out.print("Choice 1-" + options.size() + ": ");
                 int choice = scanner.nextInt();
-                
+
                 if (choice >= 1 && choice <= options.size()) {
-                    recordAnswer(options.get(choice - 1)); 
-                } else {
+                    recordAnswer(options.get(choice - 1));
+                } 
+                else {
                     System.out.println("\nInvalid choice. Saving progress...\n");
                     saveProgress();
                     return;
                 }
-            }
+        }
             
             new File("progress.ser").delete();
             System.out.println("\nQuiz is completed successfully!\n");
-        }
+            
     }
+    
 
     private void recordAnswer(String answer) {
         answers.add(answer);

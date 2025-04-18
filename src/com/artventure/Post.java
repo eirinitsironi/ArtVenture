@@ -10,4 +10,6 @@ public abstract class Post {
     }
 
     public abstract void preview();
+
+    public abstract void details();
 }

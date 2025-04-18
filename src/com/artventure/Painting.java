@@ -20,4 +20,15 @@ public class Painting extends Post {
     public boolean validate() {
         return imagePath != null && !imagePath.isEmpty() && category != null;
     }
+
+    @Override
+    public void details() {
+        System.out.println("\n--- Λεπτομέρειες Πίνακα ---");
+        System.out.println("Τίτλος: " + title);
+        System.out.println("Κατηγορία: " + category);
+        System.out.println("Λεζάντα: " + caption);
+        System.out.println("Τιμή: " + price + "€");
+        System.out.println("Ημερομηνία δημοσίευσης: " + createdAt);
+    }
+
 }

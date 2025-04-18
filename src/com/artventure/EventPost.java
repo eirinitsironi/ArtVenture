@@ -27,4 +27,17 @@ public class EventPost extends Post {
     public boolean validate() {
         return venue != null && eventDateTime != null && category != null;
     }
+
+    @Override
+    public void details() {
+        System.out.println("\n--- Λεπτομέρειες Εκδήλωσης ---");
+        System.out.println("Όνομα: " + eventName);
+        System.out.println("Χώρος: " + venue.getName());
+        System.out.println("Ημερομηνία & Ώρα: " + eventDateTime);
+        System.out.println("Κατηγορία: " + category);
+        System.out.println("Τιμή εισιτηρίου: " + ticketPrice + "€");
+        System.out.println("Διεύθυνση: " + address);
+        System.out.println("Ημερομηνία δημοσίευσης: " + createdAt);
+    }
+
 }

@@ -29,4 +29,18 @@ public class User implements Serializable{
     public List<Post> getPosts() {
         return posts;
     }
+
+    public void showAllPosts() {
+        if (posts == null || posts.isEmpty()) {
+            System.out.println("\n📭 Δεν έχεις δημοσιεύσει ακόμα τίποτα.");
+            return;
+        }
+    
+        System.out.println("\n--- Οι Δημοσιεύσεις σου ---");
+        for (int i = 0; i < posts.size(); i++) {
+            System.out.print((i + 1) + ". ");
+            posts.get(i).preview(); // καλεί την preview() κάθε υποκλάσης του Post
+        }
+    }
+    
 }

@@ -16,6 +16,6 @@ public class Venue {
     }
 
     public boolean isValid() {
-        return isAvailable; // απλή λογική, μπορείς να την εμπλουτίσεις
+        return isAvailable; 
     }
 }

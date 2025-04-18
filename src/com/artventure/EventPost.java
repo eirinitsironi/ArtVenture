@@ -19,13 +19,35 @@ public class EventPost extends Post {
         this.address = address;
     }
 
+    //Getters
+    public String getEventName() {
+        return eventName;
+    }
+
+    public Venue getVenue() {
+        return venue;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public LocalDateTime getEventDateTime() {
+        return eventDateTime;
+    }
+
+    public double getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    // --- Post functionality ---
     @Override
     public void preview() {
         System.out.println("Προεπισκόπηση Εκδήλωσης: " + eventName + " @ " + venue.getName());
-    }
-
-    public boolean validate() {
-        return venue != null && eventDateTime != null && category != null;
     }
 
     @Override
@@ -40,4 +62,7 @@ public class EventPost extends Post {
         System.out.println("Ημερομηνία δημοσίευσης: " + createdAt);
     }
 
+    public boolean validate() {
+        return venue != null && eventDateTime != null && category != null && !category.isEmpty();
+    }
 }

@@ -10,16 +10,22 @@ public class Main {
         User user = new User(1, "eirini");
 
         while (true) {
+            checkUpcomingEvents(user); 
+
             System.out.println("\n--- Main Options ---");
+            int unreadCount = user.getUnreadNotificationCount();
+            String notifLabel = unreadCount > 0 ? "Notifications (" + unreadCount + ")" : "Notifications";
+
             System.out.println("1. Profile");
             System.out.println("2. Menu");
             System.out.println("3. Venture");
             System.out.println("4. Cart");
-            System.out.println("5. Notifications");
+            System.out.println("5. " + notifLabel);
             System.out.println("0. Exit");
             System.out.print("Choose option: ");
 
             String input = scanner.nextLine();
+
             switch (input) {
                 case "1":
                     profileMenu(user);
@@ -34,7 +40,7 @@ public class Main {
                     System.out.println("Cart not implemented yet.");
                     break;
                 case "5":
-                    System.out.println("Notifications not implemented yet.");
+                    user.showNotifications();
                     break;
                 case "0":
                     System.out.println("Goodbye from ArtVenture!");
@@ -127,6 +133,7 @@ public class Main {
 
             System.out.print("Choose option: ");
             String input = scanner.nextLine();
+
             switch (input) {
                 case "1":
                     startQuiz(user);
@@ -223,7 +230,7 @@ public class Main {
             EventPost event = new EventPost(eventName, venue, imagePath, dateTime, category, ticketPrice, address);
 
             if (!venue.isValid()) {
-                System.out.println(" Invalid venue.");
+                System.out.println("Invalid venue.");
                 return;
             }
 
@@ -232,7 +239,7 @@ public class Main {
                 System.out.print("Confirm post? (yes/no): ");
                 if (scanner.nextLine().equalsIgnoreCase("yes")) {
                     user.addPost(event);
-                    System.out.println(" Event post saved.");
+                    System.out.println("Event post saved.");
                 } else {
                     System.out.println("Cancelled.");
                 }
@@ -244,4 +251,28 @@ public class Main {
             System.out.println("Invalid choice.");
         }
     }
+
+    private static void checkUpcomingEvents(User user) {
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Post post : user.getPosts()) {
+            if (post instanceof EventPost) {
+                EventPost event = (EventPost) post;
+                LocalDateTime eventDate = event.getEventDateTime();
+
+                long days = java.time.Duration.between(now, eventDate).toDays();
+
+                if (days >= 0 && days <= 3) {
+                    String msg = "Η εκδήλωση \"" + event.getEventName() + "\" Is in " + days + " days!";
+                    boolean alreadyNotified = user.getNotifications().stream()
+                        .anyMatch(n -> n.getMessage().equals(msg));
+
+                    if (!alreadyNotified) {
+                        user.addNotification(new Notification(msg));
+                    }
+                }
+            }
+        }
+    }
 }
+

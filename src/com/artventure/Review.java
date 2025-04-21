@@ -27,14 +27,13 @@ public class Review {
         }
     }
 
-
     //Getters
     public int getreviewID() {
         return reviewID;
     }
 
-    public int getreviewID() {
-        return reviewID;
+    public int getrating() {
+        return rating;
     }
 
     public string getcomment() {

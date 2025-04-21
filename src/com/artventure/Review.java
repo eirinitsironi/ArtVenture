@@ -5,7 +5,7 @@ public class Review {
     private User user;
     private Post post;
     private int rating;
-    private string comment;
+    private String comment;
 
     public Review(int reviewID, User user, Post post, int rating, String comment) {
         this.reviewID = reviewID;
@@ -16,7 +16,7 @@ public class Review {
     }
 
     public boolean isValidRating() {
-        return rating != null;
+        return rating > 0;
     }
 
     public void editReview(int newRating, String newComment, boolean confirmOverwrite) {
@@ -36,6 +36,7 @@ public class Review {
         return rating;
     }
 
-    public string getcomment() {
+    public String getcomment() {
         return comment;
     }
+}

@@ -1,4 +1,7 @@
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDate;
+
 
 public class FindVenue {
     private int venueID;
@@ -8,6 +11,7 @@ public class FindVenue {
     private List<LocalDate> availableDates;
     private float pricePerDay;
     private List<String> features;
+    private List<LocalDate[]> bookings = new ArrayList<>();
 
     public FindVenue(int venueID, String name, String location, int capacity,
                      List<LocalDate> availableDates, float pricePerDay, List<String> features) {
@@ -26,10 +30,14 @@ public boolean checkAvailability(LocalDate from, LocalDate to) {
         LocalDate bookedTo = booking[1];
 
         if (!(to.isBefore(bookedFrom) || from.isAfter(bookedTo))) {
-            return false;
+            return false;           //there is overlap in the dates
         }
     }
     return true;
+}
+
+public void addBooking(LocalDate from, LocalDate to) {
+    bookings.add(new LocalDate[]{from, to});
 }
 
 public float calculateTotalCost(LocalDate from, LocalDate to) {
@@ -64,5 +72,9 @@ public float calculateTotalCost(LocalDate from, LocalDate to) {
 
     public List<String> getFeatures() { 
         return features; 
+    }
+
+    public List<LocalDate[]> getBookings() {
+        return new ArrayList<>(bookings);       //return a copy
     }
 }

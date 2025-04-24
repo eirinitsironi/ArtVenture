@@ -263,7 +263,7 @@ public class Main {
             System.out.print("Address: ");
             String address = scanner.nextLine();
 
-            EventPost event = new EventPost(eventName, venue, imagePath, dateTime, category, ticketPrice, address);
+            Event event = new Event(eventName, venue, imagePath, dateTime, category, ticketPrice, address);
 
             if (!venue.isValid()) {
                 System.out.println("Invalid venue.");
@@ -292,8 +292,8 @@ public class Main {
         LocalDateTime now = LocalDateTime.now();
 
         for (Post post : user.getPosts()) {
-            if (post instanceof EventPost) {
-                EventPost event = (EventPost) post;
+            if (post instanceof Event) {
+                Event event = (Event) post;
                 LocalDateTime eventDate = event.getEventDateTime();
 
                 long days = java.time.Duration.between(now, eventDate).toDays();

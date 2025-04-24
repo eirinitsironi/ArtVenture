@@ -28,15 +28,15 @@ public class Review {
     }
 
     //Getters
-    public int getreviewID() {
+    public int getReviewID() {
         return reviewID;
     }
 
-    public int getrating() {
+    public int getRating() {
         return rating;
     }
 
-    public String getcomment() {
+    public String getComment() {
         return comment;
     }
 }

@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class EventPost extends Post {
+public class Event extends Post {
     private String eventName;
     private Venue venue;
     private String imagePath;
@@ -8,7 +8,7 @@ public class EventPost extends Post {
     private double ticketPrice;
     private String address;
 
-    public EventPost(String eventName, Venue venue, String imagePath, LocalDateTime eventDateTime,
+    public Event(String eventName, Venue venue, String imagePath, LocalDateTime eventDateTime,
                      String category, double ticketPrice, String address) {
         super(category);
         this.eventName = eventName;

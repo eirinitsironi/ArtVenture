@@ -9,12 +9,14 @@ public class User implements Serializable {
     private String username;
     private List<Post> posts;
     private List<Notification> notifications;
+    private PointsActivity pointsActivity;
 
     public User(int userID, String username) {
         this.userID = userID;
         this.username = username;
         this.posts = new ArrayList<>();
         this.notifications = new ArrayList<>();
+        this.pointsActivity = new PointsActivity(userID);
     }
 
     //Getters
@@ -32,6 +34,10 @@ public class User implements Serializable {
 
     public List<Notification> getNotifications() {
         return notifications;
+    }
+
+    public PointsActivity getPointsActivity() {
+        return pointsActivity;
     }
 
     //Post related
@@ -78,5 +84,19 @@ public class User implements Serializable {
             n.show();
             n.markAsRead();
         }
+    }
+
+    //Points related
+    public void earnPointsFromQuiz() {
+        pointsActivity.addPoints(5, "Quiz Completion"); // Βασικοί πόντοι για ολοκλήρωση
+    }
+
+    public void earnPointsFromTicketPurchase(double ticketPrice) {
+        int points = (int)(ticketPrice * 0.5);      //0.5 points per euro
+        pointsActivity.addPoints(points, "Ticket Purchase");
+    }
+
+    public void earnPointsFromExhibitionReview() {
+        pointsActivity.addPoints(10, "Exhibition Review");
     }
 }

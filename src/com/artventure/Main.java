@@ -58,6 +58,7 @@ public class Main {
             System.out.println("2. Visit History");
             System.out.println("3. Wishlist");
             System.out.println("4. Reviews");
+            System.out.println("5. My Points");
             System.out.println("0. Back");
 
             System.out.print("Choose option: ");
@@ -75,6 +76,9 @@ public class Main {
                     break;
                 case "4":
                     System.out.println("You haven't submitted any reviews yet.");
+                    break;
+                case "5":
+                    pointsMenu(user);
                     break;
                 case "0":
                     return;
@@ -299,7 +303,7 @@ public class Main {
                 long days = java.time.Duration.between(now, eventDate).toDays();
 
                 if (days >= 0 && days <= 3) {
-                    String msg = "Η εκδήλωση \"" + event.getEventName() + "\" Is in " + days + " days!";
+                    String msg = "Event \"" + event.getEventName() + "\" Is in " + days + " days!";
                     boolean alreadyNotified = user.getNotifications().stream()
                         .anyMatch(n -> n.getMessage().equals(msg));
 
@@ -308,6 +312,65 @@ public class Main {
                     }
                 }
             }
+        }
+    }
+
+    private static void pointsMenu(User user) {
+        while (true) {
+            System.out.println("\n--- My Points ---");
+            System.out.println("1. View Points Balance");
+            System.out.println("2. View Points History");
+            System.out.println("3. Redeem Points for Discount");
+            System.out.println("0. Back");
+
+            String input = scanner.nextLine();
+            switch (input) {
+                case "1":
+                    System.out.println("Available points: " + user.getPointsActivity().getTotalPoints());
+                    break;
+                case "2":
+                    user.getPointsActivity().showTransactionsHistory();
+                    break;
+                case "3":
+                    redeemPointsMenu(user);
+                    break;
+                case "0":
+                    return;
+                default: 
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
+
+    private static void redeemPointsMenu(User user) {
+        System.out.println("\nAvailable discounts:");
+        System.out.println("1. 100 points - 5% ticket discount");
+        System.out.println("2. 200 points - 12% ticket discount");
+        System.out.println("3. 500 points - 30% ticket discount");
+        System.out.println("Choose discount (or 0 to cancel): ");
+
+        String choice = scanner.nextLine();
+        int pointsNeeded = 0;
+
+        switch (choice) {
+            case "1":
+                pointsNeeded = 100;
+                break;
+            case "2":
+                pointsNeeded = 200;
+                break;
+            case "3":
+                pointsNeeded = 500;
+                break;
+            case "0":
+                return;
+            default: 
+                System.out.println("Invalid option.");  
+                return;
+        }
+
+        if (user.getPointsActivity().redeemPoints(pointsNeeded, "Ticket Discount")) {
+            System.out.println("Discount applied successfully!");
         }
     }
 }

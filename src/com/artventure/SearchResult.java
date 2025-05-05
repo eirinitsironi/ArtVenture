@@ -1,5 +1,5 @@
-import java.time.LocalDateTime;
-import java.util.List;
+//import java.time.LocalDateTime;
+//import java.util.List;
 
 public class SearchResult {
     private int id;

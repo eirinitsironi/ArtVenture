@@ -8,7 +8,7 @@ public class Search {
     private LocalDateTime dateTo;
     private float minPrice;
     private float maxPrice;
-    private List<Result> search;
+    private List<SearchResult> search;
 
     public Search(String keyword, String category, LocalDateTime dateFrom, LocalDateTime dateTo, float minPrice, float maxPrice) {
         this.keyword = keyword;
@@ -23,11 +23,11 @@ public class Search {
 
     //Getters
 
-    public List<Result> getSearch() {
+    public List<SearchResult> getSearch() {
         return search;
     }
 
-    public void getSearch(List<Result> search) {
+    public void getSearch(List<SearchResult> search) {
         this.search = search;
     }
 }

@@ -27,11 +27,15 @@ public class SearchFilter {
         return dateFrom;
     }
 
-    public setDateFrom(LocalDateTime dateFrom) {
+    public void setDateFrom(LocalDateTime dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public setDateTo(LocalDateTime dateTo) {
+    public LocalDateTime getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(LocalDateTime dateTo) {
         this.dateTo = dateTo;
     }
 

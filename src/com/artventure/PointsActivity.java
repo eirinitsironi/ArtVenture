@@ -15,7 +15,7 @@ public class PointsActivity {
         if (points > 0) {
             totalPoints += points;
             transactionHistory.add(new PointsTransaction(points, activityType, "Earned"));
-            System.out.println("Earned " + points + " points from " + activityType);
+            System.out.println("\nEarned " + points + " points from " + activityType + ".");
         }
     }
 

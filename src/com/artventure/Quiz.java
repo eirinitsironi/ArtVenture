@@ -56,7 +56,7 @@ public class Quiz implements Serializable {
             }
         }
         new File("progress.ser").delete();
-        System.out.println("\nQuiz is completed successfully! You earned 5 points!");        
+        System.out.println("\nQuiz is completed successfully!");        
         analyzePreferences();
         user.earnPointsFromQuiz();
     }

@@ -82,7 +82,7 @@ public class Quiz implements Serializable {
         
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             Quiz loadedQuiz = (Quiz) in.readObject();
-            System.out.println("\nQuiz is uncompleted!");
+            System.out.println("\nQuiz is incompleted!");
             System.out.println("You have answered " + loadedQuiz.answers.size() + " questions so far.");
             return loadedQuiz;
         }

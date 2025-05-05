@@ -1,6 +1,8 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class PointsActivity {
+public class PointsActivity implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int userID;
     private int totalPoints;
     private List<PointsTransaction> transactionHistory;

@@ -88,7 +88,7 @@ public class User implements Serializable {
 
     //Points related
     public void earnPointsFromQuiz() {
-        pointsActivity.addPoints(5, "Quiz Completion"); // Βασικοί πόντοι για ολοκλήρωση
+        pointsActivity.addPoints(5, "Quiz Completion"); 
     }
 
     public void earnPointsFromTicketPurchase(double ticketPrice) {

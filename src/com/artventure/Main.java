@@ -58,6 +58,7 @@ public class Main {
             System.out.println("2. Visit History");
             System.out.println("3. Wishlist");
             System.out.println("4. Reviews");
+            System.out.println("5. My Points");
             System.out.println("0. Back");
 
             System.out.print("Choose option: ");
@@ -75,6 +76,9 @@ public class Main {
                     break;
                 case "4":
                     System.out.println("You haven't submitted any reviews yet.");
+                    break;
+                case "5":
+                    pointsMenu(user);
                     break;
                 case "0":
                     return;
@@ -160,46 +164,46 @@ public class Main {
                 new Question(1, "\nWhat kind of art do you prefer?",
                     Arrays.asList("Modern", "Classic", "Abstract", "Realistic")),
                 new Question(2, "\nWhich historical period are you interested in?",
-                    Arrays.asList("Ancient Greece", "Middle Ages", "Renaissance", "Modern Era")),
+                    Arrays.asList("Modern Era", "Renaissance", "Middle Ages", "Ancient Greece")),
                 new Question(3, "\nWhich medium do you enjoy most in art?",
-                    Arrays.asList("Oil painting", "Watercolor", "Digital", "Sculpture")),
+                    Arrays.asList("Digital", "Oil painting", "Watercolor", "Sculpture")),
                 new Question(4, "\nWhich color palette appeals to you the most?",
-                    Arrays.asList("Warm tones", "Cool tones", "Monochrome", "Vivid colors")),
+                    Arrays.asList("Vivid colors", "Cool tones", "Monochrome", "Warm tones")),
                 new Question(5, "\nWhat emotion do you most enjoy seeing in art?",
-                    Arrays.asList("Joy", "Melancholy", "Mystery", "Awe")),
+                    Arrays.asList("Joy", "Awe", "Mystery", "Melancholy")),
                 new Question(6, "\nWhich artist do you admire the most?",
-                    Arrays.asList("Leonardo da Vinci", "Pablo Picasso", "Paul Gauguin", "Pablo Picasso")),
+                    Arrays.asList("Paul Gauguin", "Leonardo da Vinci", "Pablo Picasso", "Henri Matisse")),
                 new Question(7, "\nDo you prefer art that tells a story or evokes a feeling?",
-                    Arrays.asList("Tells a story", "Evokes a feeling", "Both", "Neither")),
+                    Arrays.asList("Both", "Neither", "Evokes a feeling", "Tells a story")),
                 new Question(8, "\nWhich of these art movements do you find most fascinating?",
-                    Arrays.asList("Impressionism", "Cubism", "Surrealism", "Expressionism")),
+                    Arrays.asList("Expressionism", "Impressionism", "Cubism", "Surrealism")),
                 new Question(9, "\nWhich cultural influence in art intrigues you the most?",
-                    Arrays.asList("Asian", "African", "European", "Indigenous")),
+                    Arrays.asList("European", "Asian", "African", "Indigenous")),
                 new Question(10, "\nHow important is technique versus creativity in art for you?",
-                    Arrays.asList("Technique is key", "Creativity is key", "Both equally", "Depends on the artwork")),
+                    Arrays.asList("Both equally", "Depends on the artwork", "Creativity is key", "Technique is key")),
                 new Question(11, "\nWhat would you hang on your wall?",
-                    Arrays.asList("Portrait", "Landscape", "Abstract piece", "Photograph")),
+                    Arrays.asList("Photograph", "Landscape", "Abstract piece", "Portrait")),
                 new Question(12, "\nWhat do you think art should do?",
-                    Arrays.asList("Make you think", "Make you feel", "Beautify spaces", "Challenge norms")),
+                    Arrays.asList("Make you think", "Beautify spaces", "Challenge norms", "Make you feel")),
                 new Question(13, "\nWhich painting technique fascinates you the most?",
-                    Arrays.asList("Impasto", "Glazing", "Wet-on-wet", "Dry brush")),
+                    Arrays.asList("Glazing", "Dry brush", "Wet-on-wet", "Impasto")),
                 new Question(14, "\nWhich of these painters' styles do you connect with?",
-                    Arrays.asList("Vincent Van Gogh", "Claude Monet", "Michelangelo", "Salvador Dali")),
+                    Arrays.asList("Vincent Van Gogh", "Claude Monet", "Salvador Dali", "Michelangelo")),
                 new Question(15, "\nIf your mood were a brushstroke, what would it look like?",
-                    Arrays.asList("Bold and chaotic", "Soft and flowing", "Sharp and precise", "Loose and spontaneous")),
+                    Arrays.asList("Bold and chaotic", "Soft and flowing", "Sharp and precise", "Delicate and patterned")),
                 new Question(16, "\nWhat would you paint if you had only one color and a giant canvas?",
-                    Arrays.asList("An emotion", "A dream", "A memory", "A mystery")),
+                    Arrays.asList("An emotion", "A dream", "A mystery", "A memory")),
                 new Question(17, "\nIf a painting could whisper secrets to you, what would you hope to hear?",
-                    Arrays.asList("Truths about the universe", "Forgotten childhood dreams", "The story of a stranger", "My future self speaking")),
+                    Arrays.asList("My future self speaking", "Forgotten childhood dreams", "Truths about the universe", "The story of a stranger")),
                 new Question(18, "\nIf you could mix your own unique color, what would it be made of?",
-                    Arrays.asList("Moonlight and memory", "Laughter and leaves", "Tears and twilight", "Fire and freedom")),
+                    Arrays.asList("Tears and twilight", "Laughter and leaves", "Fire and freedom", "Moonlight and memory")),
                 new Question(19, "\nWhere does your mind go when you get lost in a painting?",
-                    Arrays.asList("A silent forest", "An old forgotten city", "A childhood room", "A planet no one has seen")),
+                    Arrays.asList("A silent forest", "An old forgotten city", "A planet no one has seen", "A childhood room")),
                 new Question(20, "\nIf you could paint a feeling no one else has ever seen, what would it be?",
-                    Arrays.asList("The ache of a fading melody", "The joy of remembering a dream", "The peace after chaos", "The stillness before something begins"))                               
+                    Arrays.asList("The stillness before something begins", "The joy of remembering a dream", "The peace after chaos", "The ache of a fading melody"))                               
             );
             quiz = new Quiz(1, user, questions);
-            quiz.generateQuiz(scanner);
+            quiz.generateQuiz(scanner);       
         }
     }
 
@@ -299,7 +303,7 @@ public class Main {
                 long days = java.time.Duration.between(now, eventDate).toDays();
 
                 if (days >= 0 && days <= 3) {
-                    String msg = "Η εκδήλωση \"" + event.getEventName() + "\" Is in " + days + " days!";
+                    String msg = "Event \"" + event.getEventName() + "\" Is in " + days + " days!";
                     boolean alreadyNotified = user.getNotifications().stream()
                         .anyMatch(n -> n.getMessage().equals(msg));
 
@@ -310,5 +314,63 @@ public class Main {
             }
         }
     }
-}
 
+    private static void pointsMenu(User user) {
+        while (true) {
+            System.out.println("\n--- My Points ---");
+            System.out.println("1. View Points Balance");
+            System.out.println("2. View Points History");
+            System.out.println("3. Redeem Points for Discount");
+            System.out.println("0. Back");
+
+            String input = scanner.nextLine();
+            switch (input) {
+                case "1":
+                    System.out.println("Available points: " + user.getPointsActivity().getTotalPoints());
+                    break;
+                case "2":
+                    user.getPointsActivity().showTransactionsHistory();
+                    break;
+                case "3":
+                    redeemPointsMenu(user);
+                    break;
+                case "0":
+                    return;
+                default: 
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
+
+    private static void redeemPointsMenu(User user) {
+        System.out.println("\nAvailable discounts:");
+        System.out.println("1. 100 points - 5% ticket discount");
+        System.out.println("2. 200 points - 12% ticket discount");
+        System.out.println("3. 500 points - 30% ticket discount");
+        System.out.println("Choose discount (or 0 to cancel): ");
+
+        String choice = scanner.nextLine();
+        int pointsNeeded = 0;
+
+        switch (choice) {
+            case "1":
+                pointsNeeded = 100;
+                break;
+            case "2":
+                pointsNeeded = 200;
+                break;
+            case "3":
+                pointsNeeded = 500;
+                break;
+            case "0":
+                return;
+            default: 
+                System.out.println("Invalid option.");  
+                return;
+        }
+
+        if (user.getPointsActivity().redeemPoints(pointsNeeded, "Ticket Discount")) {
+            System.out.println("Discount applied successfully!");
+        }
+    }
+}

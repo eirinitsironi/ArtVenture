@@ -31,7 +31,7 @@ public class PointsActivity implements Serializable {
             return true;
         }
         else {
-            System.out.println("Not enough points. You need " + (points - totalPoints) + "more.\n");
+            System.out.println("Not enough points. You need " + (points - totalPoints) + " more.\n");
             System.out.println("You can earn points by taking quizzes, buying tickets and reviewing exhibitions!");
             return false;
         }
@@ -43,7 +43,7 @@ public class PointsActivity implements Serializable {
         for (PointsTransaction t : transactionHistory) {
             System.out.println(t);
         }
-        System.out.println("Total available: " + totalPoints + "points");
+        System.out.println("Total available: " + totalPoints + " points");
     }
 
     //getters

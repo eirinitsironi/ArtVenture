@@ -332,7 +332,7 @@ public class Main {
                     user.getPointsActivity().showTransactionsHistory();
                     break;
                 case "3":
-                    redeemPointsMenu(user);
+                getAvailableDiscounts(user);
                     break;
                 case "0":
                     return;
@@ -342,7 +342,7 @@ public class Main {
         }
     }
 
-    private static void redeemPointsMenu(User user) {
+    private static void getAvailableDiscounts(User user) {
         System.out.println("\nAvailable discounts:");
         System.out.println("1. 100 points - 5% ticket discount");
         System.out.println("2. 200 points - 12% ticket discount");

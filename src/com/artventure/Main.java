@@ -1,4 +1,6 @@
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 public class Main {
@@ -132,7 +134,7 @@ public class Main {
             System.out.println("1. Take Museum Preference Quiz");
             System.out.println("2. Wrapped (not implemented yet)");
             System.out.println("3. Find Venues (not implemented yet)");
-            System.out.println("4. Make Art (not implemented yet)");
+            System.out.println("4. Make Art");
             System.out.println("0. Back");
 
             System.out.print("Choose option: ");
@@ -227,9 +229,17 @@ public class Main {
             System.out.print("Caption: ");
             String caption = scanner.nextLine();
 
-            System.out.print("Price: ");
-            double price = Double.parseDouble(scanner.nextLine());
-
+            double price;
+            while (true){
+                System.out.print("Price: ");
+                try {
+                    price = Double.parseDouble(scanner.nextLine());
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid price format. Please enter a numeric value.");
+                }
+            }
+            
             Painting painting = new Painting(title, imagePath, category, caption, price);
 
             if (painting.validate()) {
@@ -243,30 +253,62 @@ public class Main {
         } else if (type.equals("2")) {
             System.out.print("Event name: ");
             String eventName = scanner.nextLine();
-
+            
             System.out.print("Venue name: ");
             String venueName = scanner.nextLine();
             Venue venue = new Venue(venueName, true);
-
+            
             System.out.print("Image path: ");
             String imagePath = scanner.nextLine();
-
-            System.out.print("Date (YYYY-MM-DD): ");
-            String date = scanner.nextLine();
-
-            System.out.print("Time (HH:MM): ");
-            String time = scanner.nextLine();
-            LocalDateTime dateTime = LocalDateTime.parse(date + "T" + time);
-
+            
+            LocalDate date = null;
+            while (true) {
+                System.out.print("Date (YYYY-MM-DD): ");
+                String dateInput = scanner.nextLine();
+                try {
+                    date = LocalDate.parse(dateInput);
+                    if (date.isBefore(LocalDate.now())) {
+                        System.out.println("Date cannot be in the past.");
+                    } else {
+                        break;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+                }
+            }
+            
+            LocalTime time = null;
+            while (true) {
+                System.out.print("Time (HH:MM): ");
+                String timeInput = scanner.nextLine();
+                try {
+                    time = LocalTime.parse(timeInput);
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Invalid time format. Please use HH:MM (24-hour).");
+                }
+            }
+            
+            LocalDateTime dateTime = LocalDateTime.of(date, time);
+            
             System.out.print("Category: ");
             String category = scanner.nextLine();
-
-            System.out.print("Ticket Price: ");
-            double ticketPrice = Double.parseDouble(scanner.nextLine());
-
+            
+            double ticketPrice = 0;
+            while (true) {
+                System.out.print("Ticket Price: ");
+                String priceInput = scanner.nextLine();
+                try {
+                    ticketPrice = Double.parseDouble(priceInput);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid price. Please enter a number (e.g., 12.50).");
+                }
+            }
+            
             System.out.print("Address: ");
             String address = scanner.nextLine();
-
+            
             Event event = new Event(eventName, venue, imagePath, dateTime, category, ticketPrice, address);
 
             if (!venue.isValid()) {
@@ -375,8 +417,6 @@ public class Main {
     }
 
     private static void makeArt(User user) {
-        ArtMaker.start(); // Αν δεν χρειάζεται τον user, αλλιώς -> ArtMaker.start(user);
+        ArtMaker.start(); 
     }
-    
-
 }

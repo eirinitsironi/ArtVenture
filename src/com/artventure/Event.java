@@ -47,19 +47,19 @@ public class Event extends Post {
     // --- Post functionality ---
     @Override
     public void preview() {
-        System.out.println("Προεπισκόπηση Εκδήλωσης: " + eventName + " @ " + venue.getName());
+        System.out.println("Event Preview: " + eventName + " @ " + venue.getName());
     }
 
     @Override
     public void details() {
-        System.out.println("\n--- Λεπτομέρειες Εκδήλωσης ---");
-        System.out.println("Όνομα: " + eventName);
-        System.out.println("Χώρος: " + venue.getName());
-        System.out.println("Ημερομηνία & Ώρα: " + eventDateTime);
-        System.out.println("Κατηγορία: " + category);
-        System.out.println("Τιμή εισιτηρίου: " + ticketPrice + "€");
-        System.out.println("Διεύθυνση: " + address);
-        System.out.println("Ημερομηνία δημοσίευσης: " + createdAt);
+        System.out.println("\n--- Event Details ---");
+        System.out.println("Event Name: " + eventName);
+        System.out.println("Venue: " + venue.getName());
+        System.out.println("Event Date and Time: " + eventDateTime);
+        System.out.println("Category: " + category);
+        System.out.println("Ticket Price: " + ticketPrice + "€");
+        System.out.println("Address: " + address);
+        System.out.println("Posted At: " + createdAt);
     }
 
     public boolean validate() {

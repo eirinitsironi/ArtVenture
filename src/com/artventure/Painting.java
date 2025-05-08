@@ -14,7 +14,7 @@ public class Painting extends Post {
 
     @Override
     public void preview() {
-        System.out.println("Προεπισκόπηση Έργου: " + title + " [" + category + "]");
+        System.out.println("Painting preview: " + title + " [" + category + "]");
     }
 
     public boolean validate() {
@@ -23,12 +23,12 @@ public class Painting extends Post {
 
     @Override
     public void details() {
-        System.out.println("\n--- Λεπτομέρειες Πίνακα ---");
-        System.out.println("Τίτλος: " + title);
-        System.out.println("Κατηγορία: " + category);
-        System.out.println("Λεζάντα: " + caption);
-        System.out.println("Τιμή: " + price + "€");
-        System.out.println("Ημερομηνία δημοσίευσης: " + createdAt);
+        System.out.println("\n--- Painting Details ---");
+        System.out.println("Title: " + title);
+        System.out.println("Category: " + category);
+        System.out.println("Caption: " + caption);
+        System.out.println("Price: " + price + "€");
+        System.out.println("Posted at: " + createdAt);
     }
 
 }

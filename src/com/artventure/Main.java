@@ -145,7 +145,7 @@ public class Main {
                 case "2":
                 case "3":
                 case "4":
-                    System.out.println("This feature is not implemented yet.");
+                    makeArt(user);    
                     break;
                 case "0":
                     return;
@@ -373,4 +373,10 @@ public class Main {
             System.out.println("Discount applied successfully!");
         }
     }
+
+    private static void makeArt(User user) {
+        ArtMaker.start(); // Αν δεν χρειάζεται τον user, αλλιώς -> ArtMaker.start(user);
+    }
+    
+
 }

@@ -10,6 +10,7 @@ public class User implements Serializable {
     private List<Post> posts;
     private List<Notification> notifications;
     private PointsActivity pointsActivity;
+    private List<Drawing> drawings;
 
     public User(int userID, String username) {
         this.userID = userID;
@@ -17,6 +18,7 @@ public class User implements Serializable {
         this.posts = new ArrayList<>();
         this.notifications = new ArrayList<>();
         this.pointsActivity = new PointsActivity(userID);
+        this.drawings= new ArrayList<>();
     }
 
     //Getters
@@ -98,5 +100,13 @@ public class User implements Serializable {
 
     public void earnPointsFromExhibitionReview() {
         pointsActivity.addPoints(10, "Exhibition Review");
+    }
+
+    public void addDrawing(Drawing drawing) {
+        drawings.add(drawing);
+    }
+    
+    public List<Drawing> getDrawings() {
+        return drawings;
     }
 }

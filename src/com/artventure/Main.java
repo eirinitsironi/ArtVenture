@@ -417,6 +417,6 @@ public class Main {
     }
 
     private static void makeArt(User user) {
-        ArtMaker.start(); 
+        ArtMaker.start(user); 
     }
 }

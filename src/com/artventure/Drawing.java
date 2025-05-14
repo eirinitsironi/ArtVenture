@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Drawing {
     private final String[][] canvas;
-    private final List<String> actions;
+    private final List<Action> actions;
     private String currentColor;
     private String currentTool;
     private String title;
@@ -33,7 +33,7 @@ public class Drawing {
     public void applyColor(int x, int y) {
         if (x >= 0 && x < 10 && y >= 0 && y < 10) {
             canvas[y][x] = currentColor;
-            actions.add("Applied " + colorName(currentColor) + " with " + currentTool + " at (" + x + "," + y + ")");
+            actions.add(new Action(x, y, currentColor, currentTool));
         } else {
             System.out.println("Invalid coordinates.");
         }
@@ -41,8 +41,10 @@ public class Drawing {
 
     public void undoLastAction() {
         if (!actions.isEmpty()) {
-            actions.remove(actions.size() - 1);
-            // optional visual clearing not implemented here
+            Action last = actions.remove(actions.size() - 1);
+            canvas[last.y][last.x] = " ";
+        } else {
+            System.out.println("No actions to undo.");
         }
     }
 
@@ -52,7 +54,9 @@ public class Drawing {
         System.out.println("Title: " + (title != null ? title : "[Untitled]"));
         renderCanvas();
         System.out.println("\nActions:");
-        actions.forEach(System.out::println);
+        for (Action action : actions) {
+            System.out.println(action.getDescription());
+        }
     }
 
     public void renderCanvas() {
@@ -69,6 +73,10 @@ public class Drawing {
         this.title = title;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     private String colorName(String c) {
         return switch (c) {
             case "R" -> "Red";
@@ -80,4 +88,22 @@ public class Drawing {
             default -> "Unknown";
         };
     }
+
+    // Inner class to track drawing actions
+    private class Action {
+        int x, y;
+        String color, tool;
+
+        public Action(int x, int y, String color, String tool) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.tool = tool;
+        }
+
+        public String getDescription() {
+            return "Applied " + colorName(color) + " with " + tool + " at (" + x + "," + y + ")";
+        }
+    }
 }
+

@@ -12,15 +12,38 @@ public class ArtMaker {
         new Template("Custom")
     );
 
-    public static void start() {
+    public static void start(User user) {
         System.out.println("\n=== Make Art (Terminal Mode) ===");
+
+        System.out.println("1. Start New Drawing");
+        System.out.println("2. View My Drawings");
+        System.out.print("Choose option: ");
+        String mainChoice = scanner.nextLine();
+
+        if (mainChoice.equals("2")) {
+            viewUserDrawings(user);
+            return;
+        }
 
         for (int i = 0; i < TEMPLATES.size(); i++) {
             System.out.println((i + 1) + ". " + TEMPLATES.get(i).getName());
         }
-        System.out.print("Choose template (1-" + TEMPLATES.size() + "): ");
-        int choice = Integer.parseInt(scanner.nextLine());
-        Template selected = TEMPLATES.get(choice - 1);
+
+        Template selected = null;
+        while (true) {
+            System.out.print("Choose template (1-" + TEMPLATES.size() + "): ");
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
+                if (choice >= 1 && choice <= TEMPLATES.size()) {
+                    selected = TEMPLATES.get(choice - 1);
+                    break;
+                } else {
+                    System.out.println("Invalid selection. Try again.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+            }
+        }
 
         Drawing drawing = new Drawing(selected);
         boolean active = true;
@@ -46,7 +69,8 @@ public class ArtMaker {
                 case "6" -> {
                     System.out.print("Enter title: ");
                     drawing.setTitle(scanner.nextLine());
-                    System.out.println("Drawing saved.");
+                    user.addDrawing(drawing);
+                    System.out.println("Drawing saved and added to your drawings.");
                 }
                 case "0" -> active = false;
                 default -> System.out.println("Invalid option.");
@@ -72,11 +96,15 @@ public class ArtMaker {
             System.out.println((i + 1) + ". " + TOOLS.get(i));
         }
         System.out.print("Select tool (1-" + TOOLS.size() + "): ");
-        int toolIndex = Integer.parseInt(scanner.nextLine()) - 1;
-        if (toolIndex >= 0 && toolIndex < TOOLS.size()) {
-            drawing.setCurrentTool(TOOLS.get(toolIndex));
-        } else {
-            System.out.println("Invalid tool selection.");
+        try {
+            int toolIndex = Integer.parseInt(scanner.nextLine()) - 1;
+            if (toolIndex >= 0 && toolIndex < TOOLS.size()) {
+                drawing.setCurrentTool(TOOLS.get(toolIndex));
+            } else {
+                System.out.println("Invalid tool selection.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a number.");
         }
     }
 
@@ -87,6 +115,29 @@ public class ArtMaker {
             System.out.print("Y (0-9): ");
             int y = Integer.parseInt(scanner.nextLine());
             drawing.applyColor(x, y);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input.");
+        }
+    }
+
+    private static void viewUserDrawings(User user) {
+        List<Drawing> drawings = user.getDrawings();
+        if (drawings.isEmpty()) {
+            System.out.println("You have no drawings saved.");
+            return;
+        }
+        for (int i = 0; i < drawings.size(); i++) {
+            System.out.println((i + 1) + ". " + (drawings.get(i).getTitle() == null ? "[Untitled]" : drawings.get(i).getTitle()));
+        }
+        System.out.print("Select drawing to view (or 0 to go back): ");
+        try {
+            int choice = Integer.parseInt(scanner.nextLine());
+            if (choice == 0) return;
+            if (choice >= 1 && choice <= drawings.size()) {
+                drawings.get(choice - 1).preview();
+            } else {
+                System.out.println("Invalid selection.");
+            }
         } catch (NumberFormatException e) {
             System.out.println("Invalid input.");
         }

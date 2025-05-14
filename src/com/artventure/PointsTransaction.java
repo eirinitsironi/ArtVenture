@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;;
 
-public class PointsTransaction {
+public class PointsTransaction implements Serializable{
     private int points;
     private String activity;
     private String type;        //Earned or Redeemed

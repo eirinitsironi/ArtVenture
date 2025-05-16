@@ -28,7 +28,7 @@ public class Notification {
     }
 
     public void show() {
-        String status = read ? "" : "[ΝΕΟ] ";
+        String status = read ? "" : "[NEW] ";
         System.out.println("- " + status + message + " (" + date.toLocalDate() + ")");
     }
 }

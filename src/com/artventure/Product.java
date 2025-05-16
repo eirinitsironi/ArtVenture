@@ -1,25 +1,41 @@
 
 public class Product {
+    private String name;
+    private double price;
+    private Category category;
 
-    private final String id;
-    private final String name;
-    private final String category;
-    private final double price;
-
-    public Product(String id, String name, String category, double price) {
-        this.id       = id;
-        this.name     = name;
+    public Product(String name, double price, Category category) {
+        this.name = name;
+        this.price = price;
         this.category = category;
-        this.price    = price;
     }
 
-    public String  getId()       { return id; }
-    public String  getName()     { return name; }
-    public String  getCategory() { return category; }
-    public double  getPrice()    { return price; }
+    public String getName() { return name; }
+    public double getPrice() { return price; }
+    public Category getCategory() { return category; }
 
-    @Override
-    public String toString() {
-        return String.format("[%s] %s (€%.2f)", category, name, price);
+    public void showDetails() {
+        System.out.println("- " + name + " | " + price + "€ | " + category.name());
+    }
+
+    public enum Category {
+        PAINTING,
+        TICKET;
+
+        public static Category fromString(String input) {
+            for (Category c : Category.values()) {
+                if (c.name().equalsIgnoreCase(input.trim())) {
+                    return c;
+                }
+            }
+            return null;
+        }
+
+        public static void showCategories() {
+            System.out.println("Available categories:");
+            for (Category c : Category.values()) {
+                System.out.println("- " + c.name());
+            }
+        }
     }
 }

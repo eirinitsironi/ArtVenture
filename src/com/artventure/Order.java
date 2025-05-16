@@ -1,36 +1,43 @@
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 public class Order {
+    private List<CartItem> items;
+    private double total;
+    private LocalDateTime orderDate;
+    private boolean pointsEarned;
 
-    public enum Status { PAID, CANCELLED, REFUNDED }
-
-    private final String          orderId;
-    private final List<CartItem>  items;
-    private final double          totalCost;
-    private final double          couponUsed;
-    private Status                status;
-    private final LocalDateTime   createdAt;
-    private final String          userId;
-
-    public Order(List<CartItem> items, double totalCost, double couponUsed, String userId) {
-        this.orderId    = UUID.randomUUID().toString();
-        this.items      = Collections.unmodifiableList(items);
-        this.totalCost  = totalCost;
-        this.couponUsed = couponUsed;
-        this.status     = Status.PAID;
-        this.createdAt  = LocalDateTime.now();
-        this.userId     = userId;
+    public Order(List<CartItem> items, double total) {
+        this.items = items;
+        this.total = total;
+        this.orderDate = LocalDateTime.now();
+        this.pointsEarned = false;
     }
 
-    public String getOrderId()           { return orderId; }
-    public List<CartItem> getItems()     { return items; }
-    public double getTotalCost()         { return totalCost; }
-    public double getCouponUsed()        { return couponUsed; }
-    public Status getStatus()            { return status; }
-    public LocalDateTime getCreatedAt()  { return createdAt; }
-    public String getUserId()            { return userId; }
+    public double getTotal() {
+        return total;
+    }
 
-    public void cancel()  { if (status == Status.PAID) status = Status.CANCELLED; }
-    public void refund()  { if (status == Status.PAID) status = Status.REFUNDED;  }
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public List<CartItem> getItems() {
+        return items;
+    }
+
+    public boolean hasEarnedPoints() {
+        return pointsEarned;
+    }
+
+    public void setPointsEarned() {
+        this.pointsEarned = true;
+    }
+
+    public void showOrder() {
+        System.out.println("Order on " + orderDate + " | Total: " + total + "€");
+        for (CartItem item : items) {
+            System.out.println("- " + item.getQuantity() + " x " + item.getProduct().getName());
+        }
+    }
 }

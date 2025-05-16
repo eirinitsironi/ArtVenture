@@ -11,6 +11,9 @@ public class User implements Serializable {
     private List<Notification> notifications;
     private PointsActivity pointsActivity;
     private List<Drawing> drawings;
+    private Cart cart;
+    private List<Order> orders;
+    private Balance balance;
 
     public User(int userID, String username) {
         this.userID = userID;
@@ -19,6 +22,9 @@ public class User implements Serializable {
         this.notifications = new ArrayList<>();
         this.pointsActivity = new PointsActivity(userID);
         this.drawings= new ArrayList<>();
+        this.cart = new Cart();
+        this.orders = new ArrayList<>();
+        this.balance = new Balance(300);
     }
 
     //Getters
@@ -40,6 +46,22 @@ public class User implements Serializable {
 
     public PointsActivity getPointsActivity() {
         return pointsActivity;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+    
+    public List<Order> getOrders() {
+        return orders;
+    }
+    
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+
+    public Balance getBalance() {
+        return balance;
     }
 
     //Post related

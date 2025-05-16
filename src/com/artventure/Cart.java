@@ -1,54 +1,131 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Cart {
+    private List<CartItem> items = new ArrayList<>();
 
-    private final List<CartItem> items = new ArrayList<>();
-    private final String userId;
-
-    public Cart(String userId) { this.userId = userId; }
-
-    public void addProduct(Product p, int qty) {
-        items.stream()
-             .filter(ci -> ci.getProduct().getId().equals(p.getId()))
-             .findFirst()
-             .ifPresentOrElse(
-                 ci -> ci.setQuantity(ci.getQuantity() + qty),
-                 () -> items.add(new CartItem(p, qty))
-             );
+    public void addItem(Product product, int quantity) {
+        for (CartItem item : items) {
+            if (item.getProduct().getName().equals(product.getName())) {
+                item = new CartItem(product, item.getQuantity() + quantity);
+                return;
+            }
+        }
+        items.add(new CartItem(product, quantity));
     }
 
-    public void removeProduct(String productId) {
-        items.removeIf(ci -> ci.getProduct().getId().equals(productId));
+    public boolean removeItem(String productName) {
+    return items.removeIf(item -> item.getProduct().getName().equalsIgnoreCase(productName));
     }
-
-    public void updateQuantity(String productId, int newQty) {
-        items.stream()
-             .filter(ci -> ci.getProduct().getId().equals(productId))
-             .findFirst()
-             .ifPresent(ci -> ci.setQuantity(newQty));
-    }
-
-    public void clear() { items.clear(); }
-
-    public boolean isEmpty() { return items.isEmpty(); }
 
     public double getTotalCost() {
-        return items.stream().mapToDouble(CartItem::getTotalPrice).sum();
+        double total = 0;
+        for (CartItem item : items) {
+            total += item.getSubtotal();
+        }
+        return total;
     }
 
-    public List<CartItem> snapshot() {
-        return items.stream()
-                    .map(ci -> new CartItem(ci.getProduct(), ci.getQuantity()))
-                    .collect(Collectors.toUnmodifiableList());
+    public List<CartItem> getItems() {
+        return items;
     }
 
-    public Optional<Order> checkout(double couponAmt) {
-        double cost = getTotalCost();
-        if (couponAmt < cost) return Optional.empty();
+    public boolean isEmpty() {
+        return items.isEmpty();
+    }
 
-        Order order = new Order(snapshot(), cost, couponAmt, userId);
+    public void clear() {
+        items.clear();
+    }
+
+    public void showCart() {
+        if (items.isEmpty()) {
+            System.out.println("Your cart is empty.");
+            return;
+        }
+        System.out.println("\n--- Your Cart ---");
+        for (CartItem item : items) {
+            System.out.println(item.getQuantity() + " x " + item.getProduct().getName() + " = " + item.getSubtotal() + "$");
+        }
+        System.out.println("Total: " + getTotalCost() + "$");
+    }
+
+    public void checkout(User user) {
+    if (isEmpty()) {
+        System.out.println("Cart is empty. Nothing to checkout.");
+        return;
+    }
+
+    showCart();
+
+    Scanner scanner = new Scanner(System.in);
+
+    double total = getTotalCost();
+
+    Map<String, Integer> availableDiscounts = user.getPointsActivity().getAvailableDiscounts();
+
+    if (!availableDiscounts.isEmpty()) {
+        System.out.println("\nAvailable point-based discounts:");
+        int i = 1;
+        List<String> discountNames = new ArrayList<>(availableDiscounts.keySet());
+
+        for (String discount : discountNames) {
+            int cost = availableDiscounts.get(discount);
+            System.out.println(i + ". " + discount + " (Cost: " + cost + " points)");
+            i++;
+        }
+
+        System.out.print("Choose discount number (or 0 to skip): ");
+        String input = scanner.nextLine();
+
+        try {
+            int choice = Integer.parseInt(input);
+            if (choice > 0 && choice <= discountNames.size()) {
+                String selectedDiscount = discountNames.get(choice - 1);
+                int pointsNeeded = availableDiscounts.get(selectedDiscount);
+                double percent = 0;
+
+                if (selectedDiscount.contains("5%")) percent = 0.05;
+                else if (selectedDiscount.contains("15%")) percent = 0.15;
+                else if (selectedDiscount.contains("30%")) percent = 0.30;
+
+                if (user.getPointsActivity().redeemPoints(pointsNeeded, selectedDiscount)) {
+                    double discountAmount = total * percent;
+                    total -= discountAmount;
+                    System.out.println("Discount of " + String.format("%.2f", discountAmount) + "$ applied!");
+                    System.out.println("New total: " + String.format("%.2f", total) + "$");
+                }
+            } else if (choice != 0) {
+                System.out.println("Invalid discount choice.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input.");
+        }
+    }
+
+    double walletBalance = user.getBalance().getTotalBalance();
+    if (walletBalance < total) {
+        System.out.println("Insufficient funds in your wallet. You have: " + walletBalance + "$, but need: " + total + "$");
+        return;
+    }
+
+    System.out.print("Confirm checkout and pay " + String.format("%.2f", total) + "$? (yes/no): ");
+    String confirm = scanner.nextLine();
+
+    if (confirm.equalsIgnoreCase("yes")) {
+        user.getBalance().deduct(total);
+
+        Order order = new Order(new ArrayList<>(getItems()), total);
+        user.addOrder(order);
         clear();
-        return Optional.of(order);
+
+        int earnedPoints = (int)(total * 0.4);
+        user.getPointsActivity().addPoints(earnedPoints, "Product Purchase");
+
+        System.out.println("Order placed! You earned " + earnedPoints + " points.");
+    } else {
+        System.out.println("Checkout cancelled.");
     }
+    
+}
+
 }

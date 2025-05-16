@@ -9,7 +9,7 @@ public class PointsActivity implements Serializable {
 
     public PointsActivity(int userID) {
         this.userID = userID;
-        this.totalPoints = 0;       //initialize 
+        this.totalPoints = 0;
         this.transactionHistory = new ArrayList<>();
     }
 
@@ -21,7 +21,6 @@ public class PointsActivity implements Serializable {
         }
     }
 
-    //redeem points for a discount
     public boolean redeemPoints(int points, String discountType) {
         if (points <= 0) return false;
         if (totalPoints >= points) {
@@ -29,15 +28,12 @@ public class PointsActivity implements Serializable {
             transactionHistory.add(new PointsTransaction(points, discountType, "Redeemed"));
             System.out.println("Redeemed " + points + " points for " + discountType);
             return true;
-        }
-        else {
+        } else {
             System.out.println("Not enough points. You need " + (points - totalPoints) + " more.\n");
-            System.out.println("You can earn points by taking quizzes, buying tickets and reviewing exhibitions!");
             return false;
         }
     }
 
-    //view transaction history
     public void showTransactionsHistory() {
         System.out.println("\n=== Points History ===");
         for (PointsTransaction t : transactionHistory) {
@@ -46,12 +42,19 @@ public class PointsActivity implements Serializable {
         System.out.println("Total available: " + totalPoints + " points");
     }
 
-    //getters
     public int getTotalPoints() {
         return totalPoints;
     }
 
     public List<PointsTransaction> getPointsTransactionHistory() {
         return transactionHistory;
+    }
+
+    public Map<String, Integer> getAvailableDiscounts() {
+        Map<String, Integer> discounts = new LinkedHashMap<>();
+        if (totalPoints >= 50) discounts.put("5% discount", 50);
+        if (totalPoints >= 150) discounts.put("15% discount", 150);
+        if (totalPoints >= 300) discounts.put("30% discount", 300);
+        return discounts;
     }
 }

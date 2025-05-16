@@ -4,7 +4,7 @@ import java.time.LocalDateTime;;
 public class PointsTransaction implements Serializable{
     private int points;
     private String activity;
-    private String type;        //Earned or Redeemed
+    private String type;
     private LocalDateTime timestamp;
 
     public PointsTransaction(int points, String activity, String type) {

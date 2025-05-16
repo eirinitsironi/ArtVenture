@@ -39,7 +39,7 @@ public class Main {
                     System.out.println("Venture not implemented yet.");
                     break;
                 case "4":
-                    System.out.println("Cart not implemented yet.");
+                    cartMenu(user);
                     break;
                 case "5":
                     user.showNotifications();
@@ -385,38 +385,135 @@ public class Main {
     }
 
     private static void getAvailableDiscounts(User user) {
-        System.out.println("\nAvailable discounts:");
-        System.out.println("1. 100 points - 5% ticket discount");
-        System.out.println("2. 200 points - 12% ticket discount");
-        System.out.println("3. 500 points - 30% ticket discount");
-        System.out.println("Choose discount (or 0 to cancel): ");
+    Map<String, Integer> availableDiscounts = user.getPointsActivity().getAvailableDiscounts();
 
-        String choice = scanner.nextLine();
-        int pointsNeeded = 0;
+    if (availableDiscounts.isEmpty()) {
+        System.out.println("\nNo discounts available. Earn more points!");
+        return;
+    }
 
-        switch (choice) {
-            case "1":
-                pointsNeeded = 100;
-                break;
-            case "2":
-                pointsNeeded = 200;
-                break;
-            case "3":
-                pointsNeeded = 500;
-                break;
-            case "0":
-                return;
-            default: 
-                System.out.println("Invalid option.");  
-                return;
+    System.out.println("\nAvailable discounts:");
+    int i = 1;
+    List<String> discountNames = new ArrayList<>(availableDiscounts.keySet());
+
+    for (String discount : discountNames) {
+        int cost = availableDiscounts.get(discount);
+        System.out.println(i + ". " + cost + " points - " + discount);
+        i++;
+    }
+
+    System.out.println("Choose discount number (or 0 to cancel): ");
+    String choice = scanner.nextLine();
+
+    try {
+        int index = Integer.parseInt(choice);
+        if (index == 0) return;
+        if (index < 1 || index > discountNames.size()) {
+            System.out.println("Invalid selection.");
+            return;
         }
 
-        if (user.getPointsActivity().redeemPoints(pointsNeeded, "Ticket Discount")) {
+        String selectedDiscount = discountNames.get(index - 1);
+        int pointsNeeded = availableDiscounts.get(selectedDiscount);
+
+        if (user.getPointsActivity().redeemPoints(pointsNeeded, selectedDiscount)) {
             System.out.println("Discount applied successfully!");
         }
+
+    } catch (NumberFormatException e) {
+        System.out.println("Invalid input.");
+    }
+
     }
 
     private static void makeArt(User user) {
         ArtMaker.start(user); 
     }
+
+    private static void cartMenu(User user) {
+    while (true) {
+        System.out.println("\n--- Shopping Cart ---");
+        System.out.println("1. View Cart");
+        System.out.println("2. Add Product");
+        System.out.println("3. Remove Product");
+        System.out.println("4. Checkout");
+        System.out.println("0. Back");
+
+        String input = scanner.nextLine();
+
+        switch (input) {
+            case "1":
+                user.getCart().showCart();
+                break;
+
+            case "2":
+                System.out.print("Enter product name: ");
+                String name = scanner.nextLine();
+
+                System.out.print("Enter price: ");
+                double price;
+                try {
+                    price = Double.parseDouble(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid price.");
+                    break;
+                }
+
+                Product.Category.showCategories();
+                System.out.print("Enter category: ");
+                String categoryInput = scanner.nextLine();
+                Product.Category category = Product.Category.fromString(categoryInput);
+
+                if (category == null) {
+                    System.out.println("Invalid category. Product not added.");
+                    break;
+                }
+
+                System.out.print("Enter quantity: ");
+                int qty;
+                try {
+                    qty = Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid quantity.");
+                    break;
+                }
+
+                Product product = new Product(name, price, category);
+                user.getCart().addItem(product, qty);
+                System.out.println("Product added.");
+                break;
+
+            case "3":
+                if (user.getCart().isEmpty()) {
+                    System.out.println("Your cart is empty. Nothing to remove.");
+                    break;
+                }
+
+                user.getCart().showCart();
+
+                System.out.print("Enter product name to remove: ");
+                String removeName = scanner.nextLine();
+                boolean removed = user.getCart().removeItem(removeName);
+
+                if (removed) {
+                    System.out.println("Product removed.");
+                } else {
+                    System.out.println("No such product in your cart.");
+                }
+                break;
+
+            case "4":
+                user.getCart().checkout(user);
+                break;
+
+            case "0":
+                return;
+
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
 }
+
+}
+

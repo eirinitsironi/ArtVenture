@@ -131,4 +131,14 @@ public class User implements Serializable {
     public List<Drawing> getDrawings() {
         return drawings;
     }
+
+    //Review related
+    private List<Review> reviews = new ArrayList<>();
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+    public List<Review> getReviews() {
+        return reviews;
+    }
 }
+

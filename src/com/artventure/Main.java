@@ -77,7 +77,7 @@ public class Main {
                     System.out.println("Wishlist is currently empty.");
                     break;
                 case "4":
-                    System.out.println("You haven't submitted any reviews yet.");
+                    reviewsMenu(user); 
                     break;
                 case "5":
                     pointsMenu(user);
@@ -242,7 +242,7 @@ public class Main {
                 }
             }
             
-            Painting painting = new Painting(title, imagePath, category, caption, price);
+           Painting painting = new Painting(title, category, imagePath, caption, price);
 
             if (painting.validate()) {
                 painting.preview();
@@ -357,6 +357,134 @@ public class Main {
                 }
             }
         }
+    }
+
+    private static void reviewsMenu(User user) {
+        while(true) {
+            System.out.println("\n--- Reviews Menu ---");
+            System.out.println("1. View My Reviews");
+            System.out.println("2. Add Review");
+            System.out.println("3. Edit Review");
+            System.out.println("0. Back");
+
+            String input = scanner.nextLine();
+
+            switch(input) {
+                case "1":
+                    List<Review> reviews = user.getReviews();
+                    if (reviews.isEmpty()) {
+                        System.out.println("No reviews yet.");
+                    } else {
+                        for (Review r : reviews) {
+                            System.out.println(r);
+                        }
+                    }
+                    break;
+
+                case "2":
+                    addReviewForUser(user);
+                    break;
+
+                case "3":
+                    editReviewForUser(user);
+                    break;
+
+                case "0":
+                    return;
+
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
+
+    private static void addReviewForUser(User user) {
+        System.out.println("Select post to review:");
+        List<Post> posts = user.getPosts();  // Ή λίστα από posts γενικότερα
+        if (posts.isEmpty()) {
+            System.out.println("No posts available.");
+            return;
+        }
+        for (int i=0; i<posts.size(); i++) {
+            System.out.println((i+1) + ". " + posts.get(i).getTitle());
+        }
+        int choice;
+        try {
+            choice = Integer.parseInt(scanner.nextLine()) - 1;
+        } catch(Exception e) {
+            System.out.println("Invalid input.");
+            return;
+        }
+        if (choice < 0 || choice >= posts.size()) {
+            System.out.println("Invalid post selection.");
+            return;
+        }
+        Post post = posts.get(choice);
+
+        System.out.print("Enter rating (1-5): ");
+        int rating;
+        try {
+            rating = Integer.parseInt(scanner.nextLine());
+        } catch(Exception e) {
+            System.out.println("Invalid rating.");
+            return;
+        }
+        if (rating < 1 || rating > 5) {
+            System.out.println("Rating must be between 1 and 5.");
+            return;
+        }
+
+        System.out.print("Enter comment: ");
+        String comment = scanner.nextLine();
+
+        Review review = new Review(user.getReviews().size()+1, user, post, rating, comment);
+        user.addReview(review);
+        System.out.println("Review added successfully.");
+    }
+
+    private static void editReviewForUser(User user) {
+        List<Review> reviews = user.getReviews();
+        if (reviews.isEmpty()) {
+            System.out.println("No reviews to edit.");
+            return;
+        }
+        System.out.println("Select review to edit:");
+        for (int i=0; i<reviews.size(); i++) {
+            System.out.println((i+1) + ". " + reviews.get(i));
+        }
+        int choice;
+        try {
+            choice = Integer.parseInt(scanner.nextLine()) - 1;
+        } catch(Exception e) {
+            System.out.println("Invalid input.");
+            return;
+        }
+        if (choice < 0 || choice >= reviews.size()) {
+            System.out.println("Invalid review selection.");
+            return;
+        }
+        Review review = reviews.get(choice);
+
+        System.out.print("Enter new rating (1-5): ");
+        int rating;
+        try {
+            rating = Integer.parseInt(scanner.nextLine());
+        } catch(Exception e) {
+            System.out.println("Invalid rating.");
+            return;
+        }
+        if (rating < 1 || rating > 5) {
+            System.out.println("Rating must be between 1 and 5.");
+            return;
+        }
+
+        System.out.print("Enter new comment: ");
+        String comment = scanner.nextLine();
+
+        System.out.print("Confirm overwrite? (yes/no): ");
+        boolean confirm = scanner.nextLine().equalsIgnoreCase("yes");
+
+        review.editReview(rating, comment, confirm);
     }
 
     private static void pointsMenu(User user) {

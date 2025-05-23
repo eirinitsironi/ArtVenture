@@ -1,20 +1,18 @@
-public class Painting extends Post {
-    private String title;
+public class Painting extends Post implements Priced {
+    private float price;
     private String imagePath;
     private String caption;
-    private double price;
 
-    public Painting(String title, String imagePath, String category, String caption, double price) {
-        super(category);
-        this.title = title;
+    public Painting(String title, String category, String imagePath, String caption, float price) {
+        super(title, category);
         this.imagePath = imagePath;
         this.caption = caption;
         this.price = price;
     }
 
     @Override
-    public void preview() {
-        System.out.println("Painting preview: " + title + " [" + category + "]");
+    public float getPrice() {
+        return price;
     }
 
     public boolean validate() {
@@ -22,13 +20,18 @@ public class Painting extends Post {
     }
 
     @Override
+    public void preview() {
+        System.out.println("Preview: " + title);
+    }
+
+    @Override
     public void details() {
-        System.out.println("\n--- Painting Details ---");
+        System.out.println("--- Painting Details ---");
         System.out.println("Title: " + title);
         System.out.println("Category: " + category);
         System.out.println("Caption: " + caption);
+        System.out.println("Image: " + imagePath);
         System.out.println("Price: " + price + "€");
         System.out.println("Posted at: " + createdAt);
     }
-
 }

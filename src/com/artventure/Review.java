@@ -16,7 +16,7 @@ public class Review {
     }
 
     public boolean isValidRating() {
-        return rating > 0;
+        return rating >= 1 && rating <= 5;
     }
 
     public void editReview(int newRating, String newComment, boolean confirmOverwrite) {
@@ -24,6 +24,9 @@ public class Review {
         if (!confirmOverwrite) {
             this.rating = newRating;
             this.comment = newComment;
+            System.out.println("Review updated.");
+        } else {
+            System.out.println("Review update cancelled.");
         }
     }
 
@@ -32,11 +35,27 @@ public class Review {
         return reviewID;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
     public int getRating() {
         return rating;
     }
 
     public String getComment() {
         return comment;
+    }
+
+    
+
+    public String toString() {
+        return "Review ID: " + reviewID + ", User: " + user.getUsername() +
+               ", Post: " + post.getTitle() + ", Rating: " + rating +
+               ", Comment: \"" + comment + "\"";
     }
 }

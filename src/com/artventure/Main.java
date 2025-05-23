@@ -240,7 +240,7 @@ public class Main {
                 }
             }
             
-            Painting painting = new Painting(title, imagePath, category, caption, price);
+           Painting painting = new Painting(title, category, imagePath, caption, price);
 
             if (painting.validate()) {
                 painting.preview();

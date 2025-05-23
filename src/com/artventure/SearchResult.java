@@ -1,6 +1,3 @@
-//import java.time.LocalDateTime;
-//import java.util.List;
-
 public class SearchResult {
     private int id;
 
@@ -13,6 +10,6 @@ public class SearchResult {
     }
 
     public void viewDetails(Object r) {
-        System.out.println("Παραπάνω λεπτομέρειες" + id);
+        System.out.println("Παραπάνω λεπτομέρειες για ID: " + id);
     }
 }

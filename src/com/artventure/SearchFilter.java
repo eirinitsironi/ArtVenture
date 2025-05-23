@@ -1,5 +1,4 @@
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class SearchFilter {
     private LocalDateTime dateFrom;
@@ -13,15 +12,6 @@ public class SearchFilter {
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
     }
-
-    public List<SearchResult> applySearch() {
-        System.out.println("Date range: " + dateFrom + "to" + dateTo);
-        System.out.println("Price range: " + minPrice + "to" + maxPrice);
-
-        return List.of();
-    }
-
-    //Getters
 
     public LocalDateTime getDateFrom() {
         return dateFrom;

@@ -15,7 +15,16 @@ public abstract class Post {
         return title;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
     public abstract void preview();
 
     public abstract void details();
 }
+

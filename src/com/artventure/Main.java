@@ -145,6 +145,8 @@ public class Main {
                     startQuiz(user);
                     break;
                 case "2":
+                    myWrapped(user);
+                    break;
                 case "3":
                 case "4":
                     makeArt(user);    
@@ -425,6 +427,19 @@ public class Main {
     }
 
     }
+    
+    private static void myWrapped(User user) {
+    WrappedService wrapped = WrappedService.loadProgress(user);
+
+    if (wrapped != null) {
+        System.out.println("\n🔄 Resuming your Wrapped from where you left off...");
+    } else {
+        wrapped = new WrappedService(user);
+        System.out.println("\n🎁 Starting your Wrapped!");
+    }
+
+    wrapped.generateWrapped(scanner);
+}
 
     private static void makeArt(User user) {
         ArtMaker.start(user); 

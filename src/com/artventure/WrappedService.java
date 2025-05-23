@@ -37,7 +37,7 @@ public class WrappedService implements Serializable {
         while (step < 5) {
             switch (step) {
                 case 0:
-                    System.out.println("\n🎉 Welcome to your 2024 Wrapped!");
+                    System.out.println("\nWelcome to your 2024 Wrapped!");
                     break;
                 case 1:
                     showTopPaintings();
@@ -66,7 +66,7 @@ public class WrappedService implements Serializable {
             }
         }
 
-        System.out.println("\n✅ Wrapped complete! See you next year!");
+        System.out.println("\nWrapped complete! See you next year!");
         new File("wrapped_" + user.getUsername() + ".ser").delete(); // Διαγραφή αποθηκευμένης προόδου
     }
 
@@ -75,7 +75,7 @@ public class WrappedService implements Serializable {
     }
 
     private void showTopPaintings() {
-        System.out.println("\n🎨 My top paintings!");
+        System.out.println("\nMy top paintings!");
         List<Painting> top = user.getRatedPaintings().stream()
                 .sorted((a, b) -> Float.compare(user.getRatingFor(b), user.getRatingFor(a)))
                 .limit(3)
@@ -88,7 +88,7 @@ public class WrappedService implements Serializable {
     }
 
     private void showTopArtists() {
-        System.out.println("\n🧑‍🎨 My top artists!");
+        System.out.println("\nMy top artists!");
         Map<Artist, List<Float>> map = new HashMap<>();
         for (Review r : user.getReviews()) {
             if (r.getItem() instanceof Painting) {
@@ -105,7 +105,7 @@ public class WrappedService implements Serializable {
     }
 
     private void showTopMuseums() {
-        System.out.println("\n🏛️ My top museums!");
+        System.out.println("\nMy top museums!");
         Map<Museum, Long> visits = user.getVisitedMuseums().stream()
                 .collect(Collectors.groupingBy(m -> m, Collectors.counting()));
 
@@ -116,12 +116,12 @@ public class WrappedService implements Serializable {
     }
 
     private void showSummaryAndRecommendations() {
-        System.out.println("\n📊 Wrapped Summary:");
+        System.out.println("\nWrapped Summary:");
         System.out.println("- Total Reviews: " + user.getReviews().size());
         System.out.println("- Museums Visited: " + user.getVisitedMuseums().size());
         System.out.println("- Paintings Rated: " + user.getRatedPaintings().size());
 
-        System.out.println("\n✨ Based on your activity, you might like:");
+        System.out.println("\nBased on your activity, you might like:");
         System.out.println("- Artist: Emerging Star");
         System.out.println("- Painting: Vibrant Dreams");
         System.out.println("- Museum: The NeoGallery");

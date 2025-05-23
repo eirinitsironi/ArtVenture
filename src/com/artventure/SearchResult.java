@@ -10,6 +10,6 @@ public class SearchResult {
     }
 
     public void viewDetails(Object r) {
-        System.out.println("Παραπάνω λεπτομέρειες για ID: " + id);
+        System.out.println("More information for ID: " + id);
     }
 }

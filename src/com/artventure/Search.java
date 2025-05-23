@@ -42,7 +42,7 @@ public class Search {
 
             // Φίλτρο τιμής (αν είναι Priced)
             if (post instanceof Priced) {
-                float price = ((Priced) post).getPrice();
+                double price = ((Priced) post).getPrice();
                 if (price < filter.getMinPrice() || price > filter.getMaxPrice()) {
                     matches = false;
                 }

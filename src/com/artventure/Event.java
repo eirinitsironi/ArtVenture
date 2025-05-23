@@ -10,7 +10,7 @@ public class Event extends Post {
 
     public Event(String eventName, Venue venue, String imagePath, LocalDateTime eventDateTime,
                      String category, double ticketPrice, String address) {
-        super(category);
+        super(eventName, category);
         this.eventName = eventName;
         this.venue = venue;
         this.imagePath = imagePath;

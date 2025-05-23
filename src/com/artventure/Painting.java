@@ -1,9 +1,9 @@
 public class Painting extends Post implements Priced {
-    private float price;
+    private double price;
     private String imagePath;
     private String caption;
 
-    public Painting(String title, String category, String imagePath, String caption, float price) {
+    public Painting(String title, String category, String imagePath, String caption, double price) {
         super(title, category);
         this.imagePath = imagePath;
         this.caption = caption;
@@ -11,7 +11,7 @@ public class Painting extends Post implements Priced {
     }
 
     @Override
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 

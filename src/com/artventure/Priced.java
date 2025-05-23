@@ -1,4 +1,4 @@
 public interface Priced {
-    float getPrice();
+    double getPrice();
 }
 

@@ -557,7 +557,7 @@ public class Main {
     }
     
     private static void myWrapped(User user) {
-    WrappedService wrapped = Wrapped.loadProgress(user);
+    Wrapped wrapped = Wrapped.loadProgress(user);
 
     if (wrapped != null) {
         System.out.println(" Resuming your Wrapped from where you left off...");

@@ -557,13 +557,13 @@ public class Main {
     }
     
     private static void myWrapped(User user) {
-    WrappedService wrapped = WrappedService.loadProgress(user);
+    WrappedService wrapped = Wrapped.loadProgress(user);
 
     if (wrapped != null) {
-        System.out.println("\n🔄 Resuming your Wrapped from where you left off...");
+        System.out.println(" Resuming your Wrapped from where you left off...");
     } else {
         wrapped = new WrappedService(user);
-        System.out.println("\n🎁 Starting your Wrapped!");
+        System.out.println(" Starting your Wrapped!");
     }
 
     wrapped.generateWrapped(scanner);

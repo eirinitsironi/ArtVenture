@@ -3,14 +3,14 @@
 public class Review {
     private int reviewID;
     private User user;
-    private Post post;
+    private Item item;
     private int rating;
     private String comment;
 
-    public Review(int reviewID, User user, Post post, int rating, String comment) {
+    public Review(int reviewID, User user, Item item, int rating, String comment) {
         this.reviewID = reviewID;
         this.user = user;
-        this.post = post;
+        this.item = item;
         this.rating = rating;
         this.comment = comment;
     }
@@ -39,8 +39,8 @@ public class Review {
         return user;
     }
 
-    public Post getPost() {
-        return post;
+    public Item getItem() {
+        return item;
     }
 
     public int getRating() {
@@ -55,7 +55,7 @@ public class Review {
 
     public String toString() {
         return "Review ID: " + reviewID + ", User: " + user.getUsername() +
-               ", Post: " + post.getTitle() + ", Rating: " + rating +
+               ", Item: " + item.getTitle() + ", Rating: " + rating +
                ", Comment: \"" + comment + "\"";
     }
 }

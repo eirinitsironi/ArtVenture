@@ -3,20 +3,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class WrappedService implements Serializable {
+public class Wrapped implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final User user;
     private int step = 0;
     private boolean completed = false;
 
-    public WrappedService(User user) {
+    public Wrapped(User user) {
         this.user = user;
     }
 
-    public static WrappedService loadProgress(User user) {
+    public static Wrapped loadProgress(User user) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("wrapped_" + user.getUsername() + ".ser"))) {
-            return (WrappedService) in.readObject();
+            return (Wrapped) in.readObject();
         } catch (Exception e) {
             return null;
         }

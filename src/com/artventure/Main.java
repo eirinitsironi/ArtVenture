@@ -562,7 +562,7 @@ public class Main {
     if (wrapped != null) {
         System.out.println(" Resuming your Wrapped from where you left off...");
     } else {
-        wrapped = new WrappedService(user);
+        wrapped = new Wrapped(user);
         System.out.println(" Starting your Wrapped!");
     }
 

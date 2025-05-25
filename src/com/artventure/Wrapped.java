@@ -38,7 +38,7 @@ public class Wrapped implements Serializable {
 
     public void generateWrapped(Scanner scanner) {
         if (!hasEnoughActivity()) {
-            System.out.println("\nYou don’t have enough activity to generate your wrapped. Come back later.");
+            System.out.println("\nYou don't have enough activity to generate your wrapped. Come back later.");
             return;
         }
 

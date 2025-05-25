@@ -79,7 +79,7 @@ public class Wrapped implements Serializable {
     }
 
     private boolean hasEnoughActivity() {
-        return !user.getReviews().isEmpty() || !user.getWishlist().isEmpty() || !user.getVisitedMuseums().isEmpty();
+        return !user.getReviews().isEmpty() || !user.getWishlist().isEmpty() || !user.getVisitedMuseums().isEmpty() || !user.getRatedPaintings().isEmpty();
     }
 
     private String getTopPaintings() {
@@ -104,7 +104,7 @@ public class Wrapped implements Serializable {
         for (Review r : user.getReviews()) {
             if (r.getPost() instanceof Painting) {
                 Artist a = ((Painting) r.getPost()).getArtist();
-                map.computeIfAbsent(a, k -> new ArrayList<>()).add(r.getRating());
+                map.computeIfAbsent(a, _ -> new ArrayList<>()).add(r.getRating());
             }
         }
 
@@ -155,5 +155,9 @@ public class Wrapped implements Serializable {
             } catch (InterruptedException ignored) {}
         }
         System.out.println();
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 }

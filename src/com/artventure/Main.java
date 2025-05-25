@@ -1,3 +1,4 @@
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -557,17 +558,39 @@ public class Main {
     }
     
     private static void myWrapped(User user) {
-    Wrapped wrapped = Wrapped.loadProgress(user);
+        Wrapped wrapped = Wrapped.loadProgress(user);
 
-    if (wrapped != null) {
-        System.out.println(" Resuming your Wrapped from where you left off...");
-    } else {
-        wrapped = new Wrapped(user);
-        System.out.println(" Starting your Wrapped!");
+        if (wrapped != null) {
+            if (wrapped.isCompleted()) {
+                System.out.println("You've already finished your Wrapped!");
+
+                System.out.print("Do you want to restart it? (yes/no): ");
+                String input = scanner.nextLine();
+
+                if (input.equalsIgnoreCase("yes")) {
+                    // Διαγραφή του αποθηκευμένου αρχείου
+                    File file = new File("wrapped.ser");
+                    if (file.exists()) {
+                        file.delete();
+                    }
+
+                    // Δημιουργία νέου wrapped
+                    wrapped = new Wrapped(user);
+                    System.out.println("Starting a new Wrapped!");
+                } else {
+                    System.out.println("Okay! Come back anytime.");
+                    return;
+                }
+            } else {
+                System.out.println("Resuming your Wrapped from where you left off...");
+            }
+        } else {
+            wrapped = new Wrapped(user);
+            System.out.println("Starting your Wrapped!");
+        }
+
+        wrapped.generateWrapped(scanner);
     }
-
-    wrapped.generateWrapped(scanner);
-}
 
     private static void makeArt(User user) {
         ArtMaker.start(user); 

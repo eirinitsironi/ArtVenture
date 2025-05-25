@@ -14,6 +14,10 @@ public class User implements Serializable {
     private Cart cart;
     private List<Order> orders;
     private Balance balance;
+    private List<Painting> wishlist = new ArrayList<>();
+    private List<Museum> visitedMuseums = new ArrayList<>();
+    private List<Painting> ratedPaintings = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 
     public User(int userID, String username) {
         this.userID = userID;
@@ -133,7 +137,6 @@ public class User implements Serializable {
     }
 
     //Review related
-    private List<Review> reviews = new ArrayList<>();
     public void addReview(Review review) {
         reviews.add(review);
     }
@@ -142,6 +145,32 @@ public class User implements Serializable {
     }
 
     //Wrapped related
-    
+    // Wishlist
+    public List<Painting> getWishlist() {
+        return wishlist;
+    }
+
+    public void addToWishlist(Painting painting) {
+        wishlist.add(painting);
+    }
+
+    // Visited Museums
+    public List<Museum> getVisitedMuseums() {
+        return visitedMuseums;
+    }
+
+    public void addVisitedMuseum(Museum museum) {
+        visitedMuseums.add(museum);
+    }
+
+    // Rated Paintings
+    public List<Painting> getRatedPaintings() {
+        return ratedPaintings;
+    }
+
+    public void addRatedPainting(Painting painting) {
+        ratedPaintings.add(painting);
+    }
 }
+
 

@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 public class Wrapped implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -14,19 +13,26 @@ public class Wrapped implements Serializable {
         this.user = user;
     }
 
-    public static Wrapped loadProgress(User user) {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("wrapped_" + user.getUsername() + ".ser"))) {
-            return (Wrapped) in.readObject();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     public void saveProgress() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("wrapped_" + user.getUsername() + ".ser"))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("wrapped.ser"))) {
             out.writeObject(this);
         } catch (IOException e) {
             System.out.println("Failed to save wrapped progress.");
+        }
+    }
+
+    public static Wrapped loadProgress(User user) {
+        File file = new File("wrapped.ser");
+        if (!file.exists()) {
+            return null;
+        }
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+            Wrapped loadedWrapped = (Wrapped) in.readObject();
+            return loadedWrapped; 
+        }
+        catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading progress!");
+            return null;
         }
     }
 
@@ -77,8 +83,6 @@ public class Wrapped implements Serializable {
         }
 
         printlnWithPause("\nWrapped complete! See you next year!");
-        deleteProgressFile();
-        saveToFile(output);
     }
 
     private boolean hasEnoughActivity() {
@@ -105,8 +109,8 @@ public class Wrapped implements Serializable {
     private String getTopArtists() {
         Map<Artist, List<Float>> map = new HashMap<>();
         for (Review r : user.getReviews()) {
-            if (r.getItem() instanceof Painting) {
-                Artist a = ((Painting) r.getItem()).getArtist();
+            if (r.getPost() instanceof Painting) {
+                Artist a = ((Painting) r.getPost()).getArtist();
                 map.computeIfAbsent(a, k -> new ArrayList<>()).add(r.getRating());
             }
         }
@@ -146,29 +150,10 @@ public class Wrapped implements Serializable {
         sb.append("- Museums Visited: ").append(user.getVisitedMuseums().size()).append("\n");
         sb.append("- Paintings Rated: ").append(user.getRatedPaintings().size()).append("\n");
 
-        sb.append("\nBased on your activity, we recommend:\n");
-        sb.append("- Artist: Emerging Star\n");
-        sb.append("- Painting: Hidden Gem\n");
-        sb.append("- Museum: ArtSpot Athens\n");
-
         System.out.println("\nSummary:\n" + sb);
         return sb.toString();
     }
-
-    private void deleteProgressFile() {
-        File f = new File("wrapped_" + user.getUsername() + ".ser");
-        if (f.exists()) f.delete();
-    }
-
-    private void saveToFile(List<String> content) {
-        try (PrintWriter writer = new PrintWriter("wrapped_report_" + user.getUsername() + ".txt")) {
-            for (String line : content) writer.println(line);
-            System.out.println("Your Wrapped has been saved to file!");
-        } catch (IOException e) {
-            System.out.println("Could not save wrapped to file.");
-        }
-    }
-
+    
     private void printlnWithPause(String text) {
         for (char c : text.toCharArray()) {
             System.out.print(c);

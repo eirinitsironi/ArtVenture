@@ -49,8 +49,6 @@ public class Review {
         return comment;
     }
 
-    
-
     public String toString() {
         return "Review ID: " + reviewID + ", User: " + user.getUsername() +
                ", Post: " + post.getTitle() + ", Rating: " + rating +

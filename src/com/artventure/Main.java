@@ -132,7 +132,7 @@ public class Main {
         while (true) {
             System.out.println("\n--- Menu ---");
             System.out.println("1. Take Museum Preference Quiz");
-            System.out.println("2. Wrapped (not implemented yet)");
+            System.out.println("2. Wrapped");
             System.out.println("3. Find Venues (not implemented yet)");
             System.out.println("4. Make Art");
             System.out.println("0. Back");

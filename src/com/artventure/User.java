@@ -140,5 +140,8 @@ public class User implements Serializable {
     public List<Review> getReviews() {
         return reviews;
     }
+
+    //Wrapped related
+    
 }
 

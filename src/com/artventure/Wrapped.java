@@ -42,29 +42,22 @@ public class Wrapped implements Serializable {
             return;
         }
 
-        List<String> output = new ArrayList<>();
-
         while (step < 5) {
             switch (step) {
                 case 0:
                     printlnWithPause("Welcome to your ArtVenture Wrapped!");
-                    output.add("Welcome to your ArtVenture Wrapped!");
                     break;
                 case 1:
-                    String paintings = getTopPaintings();
-                    output.add("\nMy Top Paintings:\n" + paintings);
+                    getTopPaintings();      
                     break;
                 case 2:
-                    String artists = getTopArtists();
-                    output.add("\nMy Top Artists:\n" + artists);
+                    getTopArtists();
                     break;
                 case 3:
-                    String museums = getTopMuseums();
-                    output.add("\nMy Top Museums:\n" + museums);
+                    getTopMuseums();
                     break;
                 case 4:
-                    String summary = getSummary();
-                    output.add("\nWrapped Summary & Recommendations:\n" + summary);
+                    getSummary();
                     completed = true;
                     break;
             }
@@ -82,7 +75,7 @@ public class Wrapped implements Serializable {
             }
         }
 
-        printlnWithPause("\nWrapped complete! See you next year!");
+        printlnWithPause("\nWrapped complete!");
     }
 
     private boolean hasEnoughActivity() {
@@ -153,7 +146,7 @@ public class Wrapped implements Serializable {
         System.out.println("\nSummary:\n" + sb);
         return sb.toString();
     }
-    
+
     private void printlnWithPause(String text) {
         for (char c : text.toCharArray()) {
             System.out.print(c);

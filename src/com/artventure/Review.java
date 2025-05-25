@@ -1,16 +1,14 @@
-//import java.time.LocalDateTime;
-
 public class Review {
     private int reviewID;
     private User user;
-    private Item item;
-    private int rating;
+    private Post post;
+    private float rating;
     private String comment;
 
-    public Review(int reviewID, User user, Item item, int rating, String comment) {
+    public Review(int reviewID, User user, Post post, float rating, String comment) {
         this.reviewID = reviewID;
         this.user = user;
-        this.item = item;
+        this.post = post;
         this.rating = rating;
         this.comment = comment;
     }
@@ -39,11 +37,11 @@ public class Review {
         return user;
     }
 
-    public Item getItem() {
-        return item;
+    public Post getPost() {
+        return post;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
@@ -55,7 +53,7 @@ public class Review {
 
     public String toString() {
         return "Review ID: " + reviewID + ", User: " + user.getUsername() +
-               ", Item: " + item.getTitle() + ", Rating: " + rating +
+               ", Post: " + post.getTitle() + ", Rating: " + rating +
                ", Comment: \"" + comment + "\"";
     }
 }

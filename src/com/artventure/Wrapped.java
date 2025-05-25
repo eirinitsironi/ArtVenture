@@ -26,13 +26,13 @@ public class Wrapped implements Serializable {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("wrapped_" + user.getUsername() + ".ser"))) {
             out.writeObject(this);
         } catch (IOException e) {
-            System.out.println("⚠️ Failed to save wrapped progress.");
+            System.out.println("Failed to save wrapped progress.");
         }
     }
 
     public void generateWrapped(Scanner scanner) {
         if (!hasEnoughActivity()) {
-            System.out.println("\n❌ You don’t have enough activity to generate your wrapped. Come back later.");
+            System.out.println("\nYou don’t have enough activity to generate your wrapped. Come back later.");
             return;
         }
 
@@ -41,24 +41,24 @@ public class Wrapped implements Serializable {
         while (step < 5) {
             switch (step) {
                 case 0:
-                    printlnWithPause("🎁 Welcome to your ArtVenture Wrapped!");
-                    output.add("🎁 Welcome to your ArtVenture Wrapped!");
+                    printlnWithPause("Welcome to your ArtVenture Wrapped!");
+                    output.add("Welcome to your ArtVenture Wrapped!");
                     break;
                 case 1:
                     String paintings = getTopPaintings();
-                    output.add("\n🎨 My Top Paintings:\n" + paintings);
+                    output.add("\nMy Top Paintings:\n" + paintings);
                     break;
                 case 2:
                     String artists = getTopArtists();
-                    output.add("\n🧑‍🎨 My Top Artists:\n" + artists);
+                    output.add("\nMy Top Artists:\n" + artists);
                     break;
                 case 3:
                     String museums = getTopMuseums();
-                    output.add("\n🏛️ My Top Museums:\n" + museums);
+                    output.add("\nMy Top Museums:\n" + museums);
                     break;
                 case 4:
                     String summary = getSummary();
-                    output.add("\n📊 Wrapped Summary & Recommendations:\n" + summary);
+                    output.add("\nWrapped Summary & Recommendations:\n" + summary);
                     completed = true;
                     break;
             }
@@ -70,13 +70,13 @@ public class Wrapped implements Serializable {
                 System.out.print("\nPress Enter to continue or type 'exit' to leave: ");
                 String input = scanner.nextLine();
                 if (input.equalsIgnoreCase("exit")) {
-                    System.out.println("🔒 Wrapped saved. Resume it anytime!");
+                    System.out.println("Wrapped saved. Resume it anytime!");
                     return;
                 }
             }
         }
 
-        printlnWithPause("\n✅ Wrapped complete! See you next year!");
+        printlnWithPause("\nWrapped complete! See you next year!");
         deleteProgressFile();
         saveToFile(output);
     }
@@ -98,7 +98,7 @@ public class Wrapped implements Serializable {
             sb.append("- ").append(p.getTitle())
               .append(" by ").append(p.getArtist().getUsername()).append("\n");
         }
-        System.out.println("\n🎨 My Top Paintings:\n" + sb);
+        System.out.println("\nMy Top Paintings:\n" + sb);
         return sb.toString();
     }
 
@@ -120,7 +120,7 @@ public class Wrapped implements Serializable {
                         .append(" (avg ").append(String.format("%.2f", e.getValue())).append(")\n"));
 
         if (sb.isEmpty()) sb.append("No artist interactions.");
-        System.out.println("\n🧑‍🎨 My Top Artists:\n" + sb);
+        System.out.println("\nMy Top Artists:\n" + sb);
         return sb.toString();
     }
 
@@ -136,7 +136,7 @@ public class Wrapped implements Serializable {
                         .append(" (").append(e.getValue()).append(" visits)\n"));
 
         if (sb.isEmpty()) sb.append("No museums visited.");
-        System.out.println("\n🏛️ My Top Museums:\n" + sb);
+        System.out.println("\nMy Top Museums:\n" + sb);
         return sb.toString();
     }
 
@@ -146,12 +146,12 @@ public class Wrapped implements Serializable {
         sb.append("- Museums Visited: ").append(user.getVisitedMuseums().size()).append("\n");
         sb.append("- Paintings Rated: ").append(user.getRatedPaintings().size()).append("\n");
 
-        sb.append("\n✨ Based on your activity, we recommend:\n");
+        sb.append("\nBased on your activity, we recommend:\n");
         sb.append("- Artist: Emerging Star\n");
         sb.append("- Painting: Hidden Gem\n");
         sb.append("- Museum: ArtSpot Athens\n");
 
-        System.out.println("\n📊 Summary:\n" + sb);
+        System.out.println("\nSummary:\n" + sb);
         return sb.toString();
     }
 
@@ -163,9 +163,9 @@ public class Wrapped implements Serializable {
     private void saveToFile(List<String> content) {
         try (PrintWriter writer = new PrintWriter("wrapped_report_" + user.getUsername() + ".txt")) {
             for (String line : content) writer.println(line);
-            System.out.println("📝 Your Wrapped has been saved to file!");
+            System.out.println("Your Wrapped has been saved to file!");
         } catch (IOException e) {
-            System.out.println("❌ Could not save wrapped to file.");
+            System.out.println("Could not save wrapped to file.");
         }
     }
 

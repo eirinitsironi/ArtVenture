@@ -37,3 +37,16 @@ public class Wishlist {
         return items.stream().anyMatch(item -> item.getId().equals(itemId));
     }
 }
+
+class WishlistItem {
+    private String id;
+    private String type;
+
+    public String getId() {
+        return id;
+    }
+
+    public String getType() {
+        return type;
+    }
+}

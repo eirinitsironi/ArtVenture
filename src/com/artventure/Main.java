@@ -91,6 +91,9 @@ public class Main {
     }
 
     private static void myPostsMenu(User user) {
+
+         List<Venue> venues = initializeVenues();
+
         while (true) {
             System.out.println("\n--- My Posts ---");
             System.out.println("1. Create New Post");
@@ -102,7 +105,7 @@ public class Main {
 
             switch (input) {
                 case "1":
-                    createPost(user);
+                    createPost(user, venues);
                     break;
                 case "2":
                     user.showAllPosts();
@@ -129,12 +132,16 @@ public class Main {
     }
 
     private static void mainMenu(User user) {
+        
+         List<Venue> venues = initializeVenues();
+
         while (true) {
             System.out.println("\n--- Menu ---");
             System.out.println("1. Take Museum Preference Quiz");
             System.out.println("2. Wrapped (not implemented yet)");
-            System.out.println("3. Find Venues (not implemented yet)");
+            System.out.println("3. Find Venues");
             System.out.println("4. Make Art");
+            System.out.println("5. 2D Design");
             System.out.println("0. Back");
 
             System.out.print("Choose option: ");
@@ -146,8 +153,13 @@ public class Main {
                     break;
                 case "2":
                 case "3":
+                    findVenues(venues, user.getBalance());
+                    break;
                 case "4":
                     makeArt(user);    
+                    break;
+                case "5":
+                    start2DDesign(user);
                     break;
                 case "0":
                     return;
@@ -209,130 +221,142 @@ public class Main {
         }
     }
 
-    private static void createPost(User user) {
-        System.out.println("\n--- Create Post ---");
-        System.out.println("1. Painting");
-        System.out.println("2. Event");
-        System.out.print("Choose type: ");
-        String type = scanner.nextLine();
+    private static void createPost(User user, List<Venue> venues) {
+    System.out.println("\n--- Create Post ---");
+    System.out.println("1. Painting");
+    System.out.println("2. Event");
+    System.out.print("Choose type: ");
+    String type = scanner.nextLine();
 
-        if (type.equals("1")) {
-            System.out.print("Title: ");
-            String title = scanner.nextLine();
+    if (type.equals("1")) {
+        System.out.print("Title: ");
+        String title = scanner.nextLine();
 
-            System.out.print("Image path: ");
-            String imagePath = scanner.nextLine();
+        System.out.print("Image path: ");
+        String imagePath = scanner.nextLine();
 
-            System.out.print("Category: ");
-            String category = scanner.nextLine();
+        System.out.print("Category: ");
+        String category = scanner.nextLine();
 
-            System.out.print("Caption: ");
-            String caption = scanner.nextLine();
+        System.out.print("Caption: ");
+        String caption = scanner.nextLine();
 
-            double price;
-            while (true){
-                System.out.print("Price: ");
-                try {
-                    price = Double.parseDouble(scanner.nextLine());
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid price format. Please enter a numeric value.");
-                }
+        double price;
+        while (true){
+            System.out.print("Price: ");
+            try {
+                price = Double.parseDouble(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid price format. Please enter a numeric value.");
             }
-            
-            Painting painting = new Painting(title, imagePath, category, caption, price);
-
-            if (painting.validate()) {
-                painting.preview();
-                user.addPost(painting);
-                System.out.println("Painting post saved.");
-            } else {
-                System.out.println("Missing required fields.");
-            }
-
-        } else if (type.equals("2")) {
-            System.out.print("Event name: ");
-            String eventName = scanner.nextLine();
-            
-            System.out.print("Venue name: ");
-            String venueName = scanner.nextLine();
-            Venue venue = new Venue(venueName, true);
-            
-            System.out.print("Image path: ");
-            String imagePath = scanner.nextLine();
-            
-            LocalDate date = null;
-            while (true) {
-                System.out.print("Date (YYYY-MM-DD): ");
-                String dateInput = scanner.nextLine();
-                try {
-                    date = LocalDate.parse(dateInput);
-                    if (date.isBefore(LocalDate.now())) {
-                        System.out.println("Date cannot be in the past.");
-                    } else {
-                        break;
-                    }
-                } catch (Exception e) {
-                    System.out.println("Invalid date format. Please use YYYY-MM-DD.");
-                }
-            }
-            
-            LocalTime time = null;
-            while (true) {
-                System.out.print("Time (HH:MM): ");
-                String timeInput = scanner.nextLine();
-                try {
-                    time = LocalTime.parse(timeInput);
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Invalid time format. Please use HH:MM (24-hour).");
-                }
-            }
-            
-            LocalDateTime dateTime = LocalDateTime.of(date, time);
-            
-            System.out.print("Category: ");
-            String category = scanner.nextLine();
-            
-            double ticketPrice = 0;
-            while (true) {
-                System.out.print("Ticket Price: ");
-                String priceInput = scanner.nextLine();
-                try {
-                    ticketPrice = Double.parseDouble(priceInput);
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid price. Please enter a number (e.g., 12.50).");
-                }
-            }
-            
-            System.out.print("Address: ");
-            String address = scanner.nextLine();
-            
-            Event event = new Event(eventName, venue, imagePath, dateTime, category, ticketPrice, address);
-
-            if (!venue.isValid()) {
-                System.out.println("Invalid venue.");
-                return;
-            }
-
-            if (event.validate()) {
-                event.preview();
-                System.out.print("Confirm post? (yes/no): ");
-                if (scanner.nextLine().equalsIgnoreCase("yes")) {
-                    user.addPost(event);
-                    System.out.println("Event post saved.");
-                } else {
-                    System.out.println("Cancelled.");
-                }
-            } else {
-                System.out.println("Missing required fields.");
-            }
-
-        } else {
-            System.out.println("Invalid choice.");
         }
+
+        Painting painting = new Painting(title, imagePath, category, caption, price);
+
+        if (painting.validate()) {
+            painting.preview();
+            user.addPost(painting);
+            System.out.println("Painting post saved.");
+        } else {
+            System.out.println("Missing required fields.");
+        }
+
+    } else if (type.equals("2")) {
+        System.out.print("Event name: ");
+        String eventName = scanner.nextLine();
+
+        System.out.println("Available Venues:");
+        for (int i = 0; i < venues.size(); i++) {
+            System.out.println((i + 1) + ". " + venues.get(i).getName());
+        }
+
+        int venueIndex = -1;
+        while (venueIndex < 0 || venueIndex >= venues.size()) {
+            System.out.print("Select venue by number: ");
+            try {
+                venueIndex = Integer.parseInt(scanner.nextLine()) - 1;
+                if (venueIndex < 0 || venueIndex >= venues.size()) {
+                    System.out.println("Invalid selection.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+            }
+        }
+
+        Venue venue = venues.get(venueIndex);
+
+        System.out.print("Image path: ");
+        String imagePath = scanner.nextLine();
+
+        LocalDate date = null;
+        while (true) {
+            System.out.print("Date (YYYY-MM-DD): ");
+            String dateInput = scanner.nextLine();
+            try {
+                date = LocalDate.parse(dateInput);
+                if (date.isBefore(LocalDate.now())) {
+                    System.out.println("Date cannot be in the past.");
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            }
+        }
+
+        LocalTime time = null;
+        while (true) {
+            System.out.print("Time (HH:MM): ");
+            String timeInput = scanner.nextLine();
+            try {
+                time = LocalTime.parse(timeInput);
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid time format. Please use HH:MM (24-hour).");
+            }
+        }
+
+        LocalDateTime dateTime = LocalDateTime.of(date, time);
+
+        System.out.print("Category: ");
+        String category = scanner.nextLine();
+
+        double ticketPrice = 0;
+        while (true) {
+            System.out.print("Ticket Price: ");
+            String priceInput = scanner.nextLine();
+            try {
+                ticketPrice = Double.parseDouble(priceInput);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid price. Please enter a number (e.g., 12.50).");
+            }
+        }
+
+        System.out.print("Address: ");
+        String address = scanner.nextLine();
+
+        Event event = new Event(eventName, venue, imagePath, dateTime, category, ticketPrice, address);
+
+        if (event.validate()) {
+            event.preview();
+            System.out.print("Confirm post? (yes/no): ");
+            if (scanner.nextLine().equalsIgnoreCase("yes")) {
+                user.addPost(event);
+                System.out.println("Event post saved.");
+            } else {
+                System.out.println("Cancelled.");
+            }
+        } else {
+            System.out.println("Missing required fields.");
+        }
+
+    } else {
+        System.out.println("Invalid choice.");
     }
+}
+
 
     private static void checkUpcomingEvents(User user) {
         LocalDateTime now = LocalDateTime.now();
@@ -515,5 +539,184 @@ public class Main {
     }
 }
 
+private static void start2DDesign(User user) {
+    Design design = new Design();
+    System.out.print("Give a name for layout: ");
+    String name = scanner.nextLine();
+
+    System.out.print("Width (in slots): ");
+    int width = Integer.parseInt(scanner.nextLine());
+
+    System.out.print("Height (in slots): ");
+    int height = Integer.parseInt(scanner.nextLine());
+
+    design.createLayout(name, width, height);
+
+    while (true) {
+        System.out.println("\n--- 2D DESIGN MENU ---");
+        System.out.println("1. Choose a wall(or floor)");
+        System.out.println("2. View a wall(or floor)");
+        System.out.println("3. Place an object");
+        System.out.println("4. Remove an object");
+        System.out.println("5. Undo");
+        System.out.println("6. Redo");
+        System.out.println("7. Save layout (without finalizing)");
+        System.out.println("8. Finalize layout");
+        System.out.println("0. Back");
+        System.out.print("Option: ");
+        String input = scanner.nextLine();
+
+        switch (input) {
+            case "1":
+                design.chooseWallCLI();
+                break;
+            case "2":
+                design.displayCurrentWallCLI();
+                break;
+            case "3":
+                design.placeObjectCLI();
+                break;
+            case "4":
+                design.removeObjectCLI();
+                break;
+            case "5":
+                design.undo();
+                break;
+            case "6":
+                design.redo();
+                break;
+            case "7":
+                design.saveLayout();
+                break;
+            case "8":
+                design.finalizeLayout();
+                 break;
+            case "0":
+                return;
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
 }
+
+public static void findVenues(List<Venue> venues, Balance userBalance) {
+    
+    VenueSearchSystem searchSystem = new VenueSearchSystem(venues);
+
+    System.out.println("\n--- Find Venues ---");
+    
+    System.out.print("Enter town (or leave empty): ");
+    String townInput = scanner.nextLine();
+    String town = townInput.isBlank() ? null : townInput;
+
+    System.out.print("Enter min price (or leave empty): ");
+    String minPriceInput = scanner.nextLine();
+    Double minPrice = minPriceInput.isBlank() ? null : Double.parseDouble(minPriceInput);
+
+    System.out.print("Enter max price (or leave empty): ");
+    String maxPriceInput = scanner.nextLine();
+    Double maxPrice = maxPriceInput.isBlank() ? null : Double.parseDouble(maxPriceInput);
+
+    System.out.print("Enter max capacity (or leave empty): ");
+    String capacityInput = scanner.nextLine();
+    Integer maxCapacity = capacityInput.isBlank() ? null : Integer.parseInt(capacityInput);
+
+    System.out.print("Enter event date (yyyy-mm-dd): ");
+    String dateInput = scanner.nextLine();
+    LocalDate eventDate = LocalDate.parse(dateInput);
+
+    VenueFilter filter = new VenueFilter(town, minPrice, maxPrice, maxCapacity);
+    List<Venue> results = searchSystem.search(filter, eventDate);
+
+    if (results.isEmpty()) {
+        System.out.println("No venues found! Try adjusting your filters.");
+        return;
+    }
+
+    System.out.print("\nSort by price ascending? (yes/no): ");
+    String sortAnswer = scanner.nextLine();
+    results = searchSystem.sortByPrice(results, sortAnswer.equalsIgnoreCase("yes"));
+
+    System.out.println("\nAvailable venues (sorted):");
+    for (int i = 0; i < results.size(); i++) {
+        System.out.println((i + 1) + ". " + results.get(i));
+    }
+
+    while (true) {
+        System.out.print("\nSelect a venue (enter number): ");
+        int selectedIndex;
+        try {
+            selectedIndex = Integer.parseInt(scanner.nextLine()) - 1;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input.");
+            continue;
+        }
+
+        if (selectedIndex < 0 || selectedIndex >= results.size()) {
+            System.out.println("Invalid selection.");
+            continue;
+        }
+
+        Venue selectedVenue = results.get(selectedIndex);
+        System.out.println("\n--- Venue Details ---");
+        System.out.println("Name: " + selectedVenue.getName());
+        System.out.println("Address: " + selectedVenue.getAddress());
+        System.out.println("Contact: " + selectedVenue.getContactInfo());
+        System.out.println("Available Dates: " + selectedVenue.getAvailableDates());
+        System.out.println("Price: " + selectedVenue.getRentingPrice() + "€");
+        System.out.println(userBalance);
+
+        System.out.print("\nDo you want to proceed with booking? (yes/no): ");
+        String proceed = scanner.nextLine();
+
+        if (proceed.equalsIgnoreCase("yes")) {
+            Booking booking = new Booking(selectedVenue, eventDate);
+            if (booking.confirm(userBalance)) {
+                System.out.println("Booking succeeded!");
+                System.out.println(userBalance);
+                return;
+            } else {
+                System.out.println("Booking failed. Check venue's availability or your balance.");
+                return;
+            }
+        } else {
+            System.out.println("Booking cancelled. Returning to search results...");
+        }
+    }
+}
+
+private static List<Venue> initializeVenues() {
+    List<Venue> venues = new ArrayList<>();
+
+    venues.add(new Venue(
+        "Venue A",
+        "Athens",
+        "210-1234567",
+        400.0,
+        150,
+        new ArrayList<>(Arrays.asList(
+            LocalDate.of(2025, 6, 20),
+            LocalDate.of(2025, 6, 25)
+        ))
+    ));
+
+    venues.add(new Venue(
+        "Venue B",
+        "Thessaloniki",
+        "2310-654321",
+        300.0,
+        100,
+        new ArrayList<>(Arrays.asList(
+            LocalDate.of(2025, 6, 20),
+            LocalDate.of(2025, 6, 23)
+        ))
+    ));
+
+    return venues;
+}
+
+
+}
+
+
 

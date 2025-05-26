@@ -14,6 +14,12 @@ public class User implements Serializable {
     private Cart cart;
     private List<Order> orders;
     private Balance balance;
+    private List<Painting> wishlist;
+    private List<Museum> visitedMuseums;
+    private List<Painting> ratedPaintings;
+    private List<Review> reviews;
+    private List<Rating> ratings;
+
 
     public User(int userID, String username) {
         this.userID = userID;
@@ -25,6 +31,11 @@ public class User implements Serializable {
         this.cart = new Cart();
         this.orders = new ArrayList<>();
         this.balance = new Balance(300);
+        this.wishlist = new ArrayList<>();
+        this.visitedMuseums = new ArrayList<>();
+        this.ratedPaintings = new ArrayList<>();
+        this.reviews = new ArrayList<>();
+        this.ratings = new ArrayList<>();
     }
 
     //Getters
@@ -131,4 +142,62 @@ public class User implements Serializable {
     public List<Drawing> getDrawings() {
         return drawings;
     }
+
+    //Review related
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    //Wrapped related
+    // Wishlist
+    public List<Painting> getWishlist() {
+        return wishlist;
+    }
+
+    public void addToWishlist(Painting painting) {
+        wishlist.add(painting);
+    }
+
+    // Visited Museums
+    public List<Museum> getVisitedMuseums() {
+        return visitedMuseums;
+    }
+
+    public void addVisitedMuseum(Museum museum) {
+        visitedMuseums.add(museum);
+    }
+
+    // Rated Paintings
+    public List<Painting> getRatedPaintings() {
+        return ratedPaintings;
+    }
+
+    public void addRatedPainting(Painting painting) {
+        ratedPaintings.add(painting);
+    }
+
+    public void ratePost(Painting painting, float rating) {
+        for (Rating r : ratings) {
+            if (r.getPost().equals(painting)) {
+                r.setRating(rating);        //ενημέρωση υπάρχουσας βαθμολογίας
+                return;
+            }
+        }
+    int newReviewID = ratings.size() + 1; 
+    ratings.add(new Rating(newReviewID, this, painting, rating));
+    }
+
+    public float getRatingFor(Painting painting) {
+    for (Rating r : ratings) {
+        if (r.getPost().equals(painting)) {
+            return r.getRating();
+        }
+    }
+    return 0.0f; 
+    }
 }
+
+

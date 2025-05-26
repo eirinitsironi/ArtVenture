@@ -3,12 +3,10 @@ import java.util.*;
 
 public class PointsActivity implements Serializable {
     private static final long serialVersionUID = 1L;
-    private int userID;
     private int totalPoints;
     private List<PointsTransaction> transactionHistory;
 
     public PointsActivity(int userID) {
-        this.userID = userID;
         this.totalPoints = 0;
         this.transactionHistory = new ArrayList<>();
     }

@@ -1,33 +1,58 @@
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Search {
     private String keyword;
     private String category;
-    private LocalDateTime dateFrom;
-    private LocalDateTime dateTo;
-    private float minPrice;
-    private float maxPrice;
-    private List<SearchResult> search;
+    private SearchFilter filter;
 
-    public Search(String keyword, String category, LocalDateTime dateFrom, LocalDateTime dateTo, float minPrice, float maxPrice) {
+    public Search(String keyword, String category, SearchFilter filter) {
         this.keyword = keyword;
         this.category = category;
-        this.dateFrom = dateFrom;
-        this.dateTo = dateTo;
-        this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
-        this.search = search;
+        this.filter = filter;
     }
 
+    public List<SearchResult> performSearch(List<Post> allPosts) {
+        List<SearchResult> results = new ArrayList<>();
 
-    //Getters
+        for (Post post : allPosts) {
+            boolean matches = true;
 
-    public List<SearchResult> getSearch() {
-        return search;
-    }
+            // Φίλτρο λέξης-κλειδιού
+            if (keyword != null && !keyword.isEmpty() &&
+                (post.getTitle() == null || !post.getTitle().toLowerCase().contains(keyword.toLowerCase()))) {
+                matches = false;
+            }
 
-    public void getSearch(List<SearchResult> search) {
-        this.search = search;
+            // Φίλτρο κατηγορίας
+            if (category != null && !category.isEmpty() &&
+                (post.getCategory() == null || !post.getCategory().equalsIgnoreCase(category))) {
+                matches = false;
+            }
+
+            // Φίλτρο ημερομηνίας
+            LocalDateTime createdAt = post.getCreatedAt();
+            if (filter.getDateFrom() != null && createdAt.isBefore(filter.getDateFrom())) {
+                matches = false;
+            }
+            if (filter.getDateTo() != null && createdAt.isAfter(filter.getDateTo())) {
+                matches = false;
+            }
+
+            // Φίλτρο τιμής (αν είναι Priced)
+            if (post instanceof Priced) {
+                double price = ((Priced) post).getPrice();
+                if (price < filter.getMinPrice() || price > filter.getMaxPrice()) {
+                    matches = false;
+                }
+            }
+
+            if (matches) {
+                results.add(new SearchResult(post.hashCode()));
+            }
+        }
+
+        return results;
     }
 }

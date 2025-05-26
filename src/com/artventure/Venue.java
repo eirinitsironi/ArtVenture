@@ -1,21 +1,42 @@
+import java.time.LocalDate;
+import java.util.List;
+
 public class Venue {
     private String name;
-    private boolean isAvailable;
+    private String address;
+    private String contactInfo;
+    private double rentingPrice;
+    private int capacity;
+    private List<LocalDate> availableDates;
 
-    public Venue(String name, boolean isAvailable) {
+
+    public Venue(String name, String address, String contactInfo, double rentingPrice, int capacity, List<LocalDate> availableDates) {
         this.name = name;
-        this.isAvailable = isAvailable;
+        this.address = address;
+        this.contactInfo = contactInfo;
+        this.rentingPrice = rentingPrice;
+        this.capacity = capacity;
+        this.availableDates = availableDates;
     }
 
-    public String getName() {
-        return name;
+    public String getName() { return name; }
+    public String getAddress() { return address; }
+    public String getContactInfo() { return contactInfo; }
+    public double getRentingPrice() { return rentingPrice; }
+    public int getCapacity() { return capacity; }
+    public List<LocalDate> getAvailableDates() { return availableDates; }
+
+    public boolean isAvailableOn(LocalDate date) {
+        return availableDates.contains(date);
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public void bookDate(LocalDate date) {
+        availableDates.remove(date);
     }
 
-    public boolean isValid() {
-        return isAvailable; 
+    @Override
+    public String toString() {
+        return name + " | " + address + " | " + rentingPrice + "€ | Cap: " + capacity;
     }
 }
+

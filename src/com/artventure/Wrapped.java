@@ -104,7 +104,7 @@ public class Wrapped implements Serializable {
         for (Review r : user.getReviews()) {
             if (r.getPost() instanceof Painting) {
                 Artist a = ((Painting) r.getPost()).getArtist();
-                map.computeIfAbsent(a, _ -> new ArrayList<>()).add(r.getRating());
+                map.computeIfAbsent(a, ignored -> new ArrayList<>()).add(r.getRating());
             }
         }
 

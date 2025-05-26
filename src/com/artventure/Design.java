@@ -39,9 +39,9 @@ public class Design {
         System.out.print("Object type (CHAIR/PAINTING): ");
         String typeStr = scanner.nextLine().toUpperCase();
 
-        Object.ObjectType type;
+        PlacedObject.ObjectType type;
         try {
-            type = Object.ObjectType.valueOf(typeStr);
+            type = PlacedObject.ObjectType.valueOf(typeStr);
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid type.");
             return;
@@ -64,7 +64,7 @@ public class Design {
         int y = scanner.nextInt();
         scanner.nextLine();
 
-        Object obj = new Object(type, name, new Dimensions(width, height, depth));
+        PlacedObject obj = new PlacedObject(type, name, new Dimensions(width, height, depth));
         boolean success = placeObject(obj, x, y);
 
         if (success) {
@@ -99,13 +99,13 @@ public class Design {
         }
     }
 
-    public boolean placeObject(Object obj, int x, int y) {
+    public boolean placeObject(PlacedObject obj, int x, int y) {
         if (currentLayout.isFinalized()) return false;
 
-        if (obj.getType() == Object.ObjectType.CHAIR && currentView != Wall.WallType.FLOOR) {
+        if (obj.getType() == PlacedObject.ObjectType.CHAIR && currentView != Wall.WallType.FLOOR) {
             System.out.println("Chairs can be placed only on the floor.");
             return false;
-        } else if (obj.getType() == Object.ObjectType.PAINTING && currentView == Wall.WallType.FLOOR) {
+        } else if (obj.getType() == PlacedObject.ObjectType.PAINTING && currentView == Wall.WallType.FLOOR) {
             System.out.println("Paintings can be placed only on the walls.");
             return false;
         }

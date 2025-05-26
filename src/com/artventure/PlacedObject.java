@@ -1,4 +1,4 @@
-public class Object {
+public class PlacedObject {
     public enum ObjectType { CHAIR, PAINTING }
 
     private ObjectType type;
@@ -6,7 +6,7 @@ public class Object {
     private Dimensions dimensions;
     private boolean locked = false;
 
-    public Object(ObjectType type, String name, Dimensions dimensions) {
+    public PlacedObject(ObjectType type, String name, Dimensions dimensions) {
         this.type = type;
         this.name = name;
         this.dimensions = dimensions;
@@ -24,8 +24,8 @@ public class Object {
         this.locked = locked;
     }
 
-    public Object deepCopy() {
-        return new Object(type, name, new Dimensions(
+    public PlacedObject deepCopy() {
+        return new PlacedObject(type, name, new Dimensions(
             dimensions.getWidth(),
             dimensions.getHeight(),
             dimensions.getDepth()

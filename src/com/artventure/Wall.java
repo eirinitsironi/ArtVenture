@@ -14,11 +14,11 @@ public class Wall {
         }
     }
 
-    public boolean canPlace(Object obj, int x, int y) {
+    public boolean canPlace(PlacedObject obj, int x, int y) {
         return isValidPosition(x, y) && !grid[x][y].isOccupied();
     }
 
-    public boolean placeObject(Object obj, int x, int y) {
+    public boolean placeObject(PlacedObject obj, int x, int y) {
         if (canPlace(obj, x, y)) {
             grid[x][y].placeObject(obj);
             return true;
@@ -34,7 +34,7 @@ public class Wall {
         return false;
     }
 
-    public Object getObjectAt(int x, int y) {
+    public PlacedObject getObjectAt(int x, int y) {
         return isValidPosition(x, y) ? grid[x][y].getObject() : null;
     }
 
@@ -54,7 +54,7 @@ public class Wall {
         Wall copy = new Wall(this.type, grid.length, grid[0].length);
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[0].length; y++) {
-                Object obj = grid[x][y].getObject();
+                PlacedObject obj = grid[x][y].getObject();
                 if (obj != null) {
                     copy.grid[x][y].placeObject(obj.deepCopy());
                 }

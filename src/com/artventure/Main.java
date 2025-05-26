@@ -224,7 +224,7 @@ public class Main {
         }
     }
 
-    private static void createPost(User user, List<Venue> venues) {
+      private static void createPost(User user, List<Venue> venues) {
     System.out.println("\n--- Create Post ---");
     System.out.println("1. Painting");
     System.out.println("2. Event");
@@ -359,7 +359,6 @@ public class Main {
         System.out.println("Invalid choice.");
     }
 }
-
 
     private static void checkUpcomingEvents(User user) {
         LocalDateTime now = LocalDateTime.now();

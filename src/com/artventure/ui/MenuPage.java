@@ -2,7 +2,7 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
-import ui.MyWrappedPage;
+import com.artventure.ui.MyWrappedPage;
 
 public class MenuPage {
     public static void open() {

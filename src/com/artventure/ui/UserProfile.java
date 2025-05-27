@@ -133,7 +133,6 @@ public class UserProfile {
         frame.setVisible(true);
     }
 
-    // ✅ ΝΕΑ "σελίδα" με επιλογές (όχι popup)
     public static void openSideMenuPage() {
         JFrame menuFrame = new JFrame("Menu");
         menuFrame.setSize(300, 400);

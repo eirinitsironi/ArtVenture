@@ -31,6 +31,7 @@ public class UserProfile {
 
         String[] icons = {"≡", "🛒", "🔔"};
         int btnY = 0;
+
         for (String icon : icons) {
             JButton btn = new JButton(icon);
             btn.setFont(new Font("UI Emoji", Font.PLAIN, 20));
@@ -39,6 +40,11 @@ public class UserProfile {
             btn.setBorderPainted(false);
             btn.setFocusPainted(false);
             btn.setOpaque(true);
+
+            if (icon.equals("≡")) {
+                btn.addActionListener(e -> MenuPage.open());
+            }
+
             topPanel.add(btn);
             btnY += 45;
         }
@@ -127,6 +133,35 @@ public class UserProfile {
         frame.setVisible(true);
     }
 
+    // ✅ ΝΕΑ "σελίδα" με επιλογές (όχι popup)
+    public static void openSideMenuPage() {
+        JFrame menuFrame = new JFrame("Menu");
+        menuFrame.setSize(300, 400);
+        menuFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        menuFrame.setLayout(new GridLayout(4, 1, 10, 10));
+        menuFrame.getContentPane().setBackground(new Color(0xF0F0F0));
+
+        String[] options = {"Preference Quiz", "My Wrapped", "Find Venues", "Make Art"};
+
+        for (String option : options) {
+            JButton button = new JButton(option);
+            button.setFont(new Font("Arial", Font.PLAIN, 18));
+            button.setFocusPainted(false);
+            button.setBackground(Color.WHITE);
+            button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            button.addActionListener(e ->
+                            JOptionPane.showMessageDialog(menuFrame, "Opening: " + option)
+                    // ➕ ή κάλεσε άλλη JFrame εδώ
+            );
+
+            menuFrame.add(button);
+        }
+
+        menuFrame.setLocationRelativeTo(null);
+        menuFrame.setVisible(true);
+    }
+
     public static void showReviewDialog(JFrame parentFrame) {
         JDialog dialog = new JDialog(parentFrame, "Reviews Menu", true);
         dialog.setSize(300, 250);
@@ -186,7 +221,6 @@ public class UserProfile {
                 int selectedIndex = java.util.Arrays.asList(reviewTitles).indexOf(selected);
                 ReviewPopup.ReviewData oldReview = userReviews.get(selectedIndex);
 
-                // Show pre-filled popup
                 ReviewPopup.ReviewData updated = ReviewPopup.showReviewPopupWithPreFilled(parentFrame, oldReview);
                 if (updated != null) {
                     userReviews.set(selectedIndex, updated);
@@ -196,7 +230,7 @@ public class UserProfile {
             }
         });
 
-        closeBtn.addActionListener(ignored -> dialog.dispose());
+        closeBtn.addActionListener(e -> dialog.dispose());
 
         Font btnFont = new Font("Arial", Font.PLAIN, 16);
         for (JButton btn : new JButton[]{viewBtn, addBtn, editBtn, closeBtn}) {

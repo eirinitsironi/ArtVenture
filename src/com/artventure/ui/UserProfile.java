@@ -3,8 +3,12 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserProfile extends JPanel {
+
+    private static final List<ReviewPopup.ReviewData> userReviews = new ArrayList<>();
 
     public UserProfile() {
         setLayout(null);
@@ -96,6 +100,11 @@ public class UserProfile extends JPanel {
             button.add(textLabel, BorderLayout.WEST);
             button.add(arrowLabel, BorderLayout.EAST);
 
+            if (label.equals("Reviews")) {
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                button.addActionListener(e -> showReviewDialog(frame));
+            }
+
             middlePanel.add(button);
             y += 50;
         }
@@ -122,5 +131,86 @@ public class UserProfile extends JPanel {
         }
 
         add(navBar);
+    }
+    public static void showReviewDialog(JFrame parentFrame) {
+        JDialog dialog = new JDialog(parentFrame, "Reviews Menu", true);
+        dialog.setSize(300, 250);
+        dialog.setLayout(new GridLayout(4, 1, 10, 10));
+
+        JButton viewBtn = new JButton("View My Reviews");
+        JButton addBtn = new JButton("Add Review");
+        JButton editBtn = new JButton("Edit Review");
+        JButton closeBtn = new JButton("Close");
+
+        viewBtn.addActionListener(e -> {
+            if (userReviews.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog, "No reviews yet.");
+            } else {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < userReviews.size(); i++) {
+                    ReviewPopup.ReviewData r = userReviews.get(i);
+                    sb.append("Review ").append(i + 1).append(": ")
+                            .append(r.rating).append(" stars - ")
+                            .append(r.comment).append("\n\n");
+                }
+                JOptionPane.showMessageDialog(dialog, sb.toString(), "My Reviews", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        addBtn.addActionListener(e -> {
+            dialog.dispose();
+            ReviewPopup.ReviewData review = ReviewPopup.showReviewPopup(parentFrame);
+            if (review != null) {
+                userReviews.add(review);
+                JOptionPane.showMessageDialog(parentFrame,
+                        "Thank you! You gave " + review.rating + " stars\nComment: " + review.comment);
+            }
+        });
+
+        editBtn.addActionListener(e -> {
+            if (userReviews.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog, "No reviews to edit.");
+                return;
+            }
+
+            String[] reviewTitles = new String[userReviews.size()];
+            for (int i = 0; i < userReviews.size(); i++) {
+                ReviewPopup.ReviewData r = userReviews.get(i);
+                reviewTitles[i] = "Review " + (i + 1) + ": " + r.rating + "★ - " + r.comment;
+            }
+
+            String selected = (String) JOptionPane.showInputDialog(dialog,
+                    "Select a review to edit:",
+                    "Edit Review",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    reviewTitles,
+                    reviewTitles[0]);
+
+            if (selected != null) {
+                int selectedIndex = java.util.Arrays.asList(reviewTitles).indexOf(selected);
+                ReviewPopup.ReviewData oldReview = userReviews.get(selectedIndex);
+
+                // Show pre-filled popup
+                ReviewPopup.ReviewData updated = ReviewPopup.showReviewPopupWithPreFilled(parentFrame, oldReview);
+                if (updated != null) {
+                    userReviews.set(selectedIndex, updated);
+                    JOptionPane.showMessageDialog(parentFrame,
+                            "Review updated! New rating: " + updated.rating + "\nComment: " + updated.comment);
+                }
+            }
+        });
+
+        closeBtn.addActionListener(e -> dialog.dispose());
+
+        Font btnFont = new Font("Arial", Font.PLAIN, 16);
+        for (JButton btn : new JButton[]{viewBtn, addBtn, editBtn, closeBtn}) {
+            btn.setFont(btnFont);
+            btn.setFocusPainted(false);
+            dialog.add(btn);
+        }
+
+        dialog.setLocationRelativeTo(parentFrame);
+        dialog.setVisible(true);
     }
 }

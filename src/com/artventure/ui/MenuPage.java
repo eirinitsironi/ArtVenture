@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
+import ui.MyWrappedPage;
 
 public class MenuPage {
     public static void open() {
@@ -65,10 +66,15 @@ public class MenuPage {
             button.add(textLabel, BorderLayout.WEST);
             button.add(arrowLabel, BorderLayout.EAST);
 
-            button.addActionListener(e ->
-                            JOptionPane.showMessageDialog(frame, "Opening: " + label)
-                    // ή άνοιξε άλλο frame εδώ
-            );
+            button.addActionListener(e -> {
+                if (label.equals("My wrapped")) {
+                    MyWrappedPage.open();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Opening: " + label);
+                    // Μπορείς να προσθέσεις αντίστοιχα actions για άλλα κουμπιά εδώ
+                }
+            });
+
 
             middlePanel.add(button);
             y += 50;

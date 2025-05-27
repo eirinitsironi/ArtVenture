@@ -5,6 +5,7 @@ import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import backend.User;
 
 public class UserProfile {
 
@@ -80,6 +81,8 @@ public class UserProfile {
         String[] buttonLabels = {"My posts", "Visit history", "Wishlist", "Reviews"};
         int y = 0;
 
+        User user = new User(1, "eirini");
+
         for (String label : buttonLabels) {
             JButton button = new JButton();
             button.setLayout(new BorderLayout());
@@ -102,7 +105,13 @@ public class UserProfile {
             button.add(textLabel, BorderLayout.WEST);
             button.add(arrowLabel, BorderLayout.EAST);
 
-            if (label.equals("Reviews")) {
+            if (label.equals("My posts")) {
+                button.addActionListener(e -> {
+                    frame.setContentPane(new MyPostsPanel(frame, user));
+                    frame.revalidate();
+                    frame.repaint();
+                });
+            } else if (label.equals("Reviews")) {
                 button.addActionListener(ignored -> showReviewDialog(frame));
             }
 

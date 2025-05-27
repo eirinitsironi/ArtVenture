@@ -5,6 +5,7 @@ import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import backend.User;
 
 public class UserProfile {
 
@@ -42,7 +43,7 @@ public class UserProfile {
             btn.setOpaque(true);
 
             if (icon.equals("≡")) {
-                btn.addActionListener(e -> MenuPage.open());
+                btn.addActionListener(ignored -> MenuPage.open());
             }
 
             topPanel.add(btn);
@@ -80,6 +81,8 @@ public class UserProfile {
         String[] buttonLabels = {"My posts", "Visit history", "Wishlist", "Reviews"};
         int y = 0;
 
+        User user = new User(1, "eirini");
+
         for (String label : buttonLabels) {
             JButton button = new JButton();
             button.setLayout(new BorderLayout());
@@ -102,7 +105,13 @@ public class UserProfile {
             button.add(textLabel, BorderLayout.WEST);
             button.add(arrowLabel, BorderLayout.EAST);
 
-            if (label.equals("Reviews")) {
+            if (label.equals("My posts")) {
+                button.addActionListener(e -> {
+                    frame.setContentPane(new MyPostsPanel(frame, user));
+                    frame.revalidate();
+                    frame.repaint();
+                });
+            } else if (label.equals("Reviews")) {
                 button.addActionListener(ignored -> showReviewDialog(frame));
             }
 
@@ -149,9 +158,8 @@ public class UserProfile {
             button.setBackground(Color.WHITE);
             button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-            button.addActionListener(e ->
+            button.addActionListener(ignored ->
                             JOptionPane.showMessageDialog(menuFrame, "Opening: " + option)
-                    // ➕ ή κάλεσε άλλη JFrame εδώ
             );
 
             menuFrame.add(button);
@@ -229,7 +237,7 @@ public class UserProfile {
             }
         });
 
-        closeBtn.addActionListener(e -> dialog.dispose());
+        closeBtn.addActionListener(ignored -> dialog.dispose());
 
         Font btnFont = new Font("Arial", Font.PLAIN, 16);
         for (JButton btn : new JButton[]{viewBtn, addBtn, editBtn, closeBtn}) {

@@ -6,24 +6,29 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfile extends JPanel {
+public class UserProfile {
 
     private static final List<ReviewPopup.ReviewData> userReviews = new ArrayList<>();
 
-    public UserProfile() {
-        setLayout(null);
-        setBackground(new Color(0xD3DFB7));
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(UserProfile::createAndShowGUI);
+    }
+
+    public static void createAndShowGUI() {
+        JFrame frame = new JFrame("User Profile");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 700);
+        frame.setLayout(null);
+        frame.getContentPane().setBackground(new Color(0xD3DFB7));
 
         Color backgroundColor = new Color(0xD3DFB7);
         Color iconColor = new Color(0xC4D2A4);
         Color middleButtonColor = new Color(0xE6E6FA);
 
-        // === Top Panel ===
         JPanel topPanel = new JPanel(null);
         topPanel.setBackground(backgroundColor);
         topPanel.setBounds(0, 0, 400, 180);
 
-        // === Top Left Icon Buttons ===
         String[] icons = {"≡", "🛒", "🔔"};
         int btnY = 0;
         for (String icon : icons) {
@@ -33,7 +38,6 @@ public class UserProfile extends JPanel {
             btn.setBackground(iconColor);
             btn.setBorderPainted(false);
             btn.setFocusPainted(false);
-            btn.setContentAreaFilled(true);
             btn.setOpaque(true);
             topPanel.add(btn);
             btnY += 45;
@@ -44,7 +48,6 @@ public class UserProfile extends JPanel {
         nameLabel.setBounds(60, 35, 200, 30);
         topPanel.add(nameLabel);
 
-        // === Profile Picture ===
         URL imageUrl = UserProfile.class.getResource("/ui/resources/profile.png");
         if (imageUrl != null) {
             ImageIcon icon = new ImageIcon(imageUrl);
@@ -52,11 +55,8 @@ public class UserProfile extends JPanel {
             JLabel profilePic = new JLabel(new ImageIcon(image));
             profilePic.setBounds(300, 20, 80, 80);
             topPanel.add(profilePic);
-        } else {
-            System.out.println("Η εικόνα profile.png δεν βρέθηκε!");
         }
 
-        // === Points Label ===
         JLabel pointsLabel = new JLabel("Points 0", SwingConstants.CENTER);
         pointsLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         pointsLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -65,11 +65,9 @@ public class UserProfile extends JPanel {
         pointsLabel.setBounds(310, 105, 60, 25);
         topPanel.add(pointsLabel);
 
-        add(topPanel);
+        frame.add(topPanel);
 
-        // === Middle Buttons Panel ===
-        JPanel middlePanel = new JPanel();
-        middlePanel.setLayout(null);
+        JPanel middlePanel = new JPanel(null);
         middlePanel.setBounds(0, 250, 400, 200);
         middlePanel.setBackground(backgroundColor);
 
@@ -89,39 +87,33 @@ public class UserProfile extends JPanel {
             JLabel textLabel = new JLabel(label);
             textLabel.setFont(new Font("Arial", Font.PLAIN, 18));
             textLabel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
-            textLabel.setVerticalAlignment(SwingConstants.CENTER);
 
             JLabel arrowLabel = new JLabel(">", SwingConstants.RIGHT);
             arrowLabel.setForeground(Color.GRAY);
             arrowLabel.setFont(new Font("Arial", Font.BOLD, 18));
             arrowLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
-            arrowLabel.setVerticalAlignment(SwingConstants.CENTER);
 
             button.add(textLabel, BorderLayout.WEST);
             button.add(arrowLabel, BorderLayout.EAST);
 
             if (label.equals("Reviews")) {
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-                button.addActionListener(e -> showReviewDialog(frame));
+                button.addActionListener(ignored -> showReviewDialog(frame));
             }
 
             middlePanel.add(button);
             y += 50;
         }
 
-        add(middlePanel);
+        frame.add(middlePanel);
 
-        // === Bottom Navigation Bar ===
-        JPanel navBar = new JPanel();
-        navBar.setLayout(new GridLayout(1, 2));
+        JPanel navBar = new JPanel(new GridLayout(1, 2));
         navBar.setBounds(0, 630, 400, 40);
         navBar.setBackground(iconColor);
 
         JButton homeButton = new JButton("🧭");
         JButton profileButton = new JButton("👤");
 
-        JButton[] navButtons = {homeButton, profileButton};
-        for (JButton btn : navButtons) {
+        for (JButton btn : new JButton[]{homeButton, profileButton}) {
             btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
             btn.setFocusPainted(false);
             btn.setBorderPainted(false);
@@ -130,8 +122,11 @@ public class UserProfile extends JPanel {
             navBar.add(btn);
         }
 
-        add(navBar);
+        frame.add(navBar);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
+
     public static void showReviewDialog(JFrame parentFrame) {
         JDialog dialog = new JDialog(parentFrame, "Reviews Menu", true);
         dialog.setSize(300, 250);
@@ -142,7 +137,7 @@ public class UserProfile extends JPanel {
         JButton editBtn = new JButton("Edit Review");
         JButton closeBtn = new JButton("Close");
 
-        viewBtn.addActionListener(e -> {
+        viewBtn.addActionListener(ignored -> {
             if (userReviews.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "No reviews yet.");
             } else {
@@ -157,7 +152,7 @@ public class UserProfile extends JPanel {
             }
         });
 
-        addBtn.addActionListener(e -> {
+        addBtn.addActionListener(ignored -> {
             dialog.dispose();
             ReviewPopup.ReviewData review = ReviewPopup.showReviewPopup(parentFrame);
             if (review != null) {
@@ -167,7 +162,7 @@ public class UserProfile extends JPanel {
             }
         });
 
-        editBtn.addActionListener(e -> {
+        editBtn.addActionListener(ignored -> {
             if (userReviews.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "No reviews to edit.");
                 return;
@@ -201,7 +196,7 @@ public class UserProfile extends JPanel {
             }
         });
 
-        closeBtn.addActionListener(e -> dialog.dispose());
+        closeBtn.addActionListener(ignored -> dialog.dispose());
 
         Font btnFont = new Font("Arial", Font.PLAIN, 16);
         for (JButton btn : new JButton[]{viewBtn, addBtn, editBtn, closeBtn}) {

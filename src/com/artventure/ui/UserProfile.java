@@ -42,7 +42,7 @@ public class UserProfile {
             btn.setOpaque(true);
 
             if (icon.equals("≡")) {
-                btn.addActionListener(e -> MenuPage.open());
+                btn.addActionListener(ignored -> MenuPage.open());
             }
 
             topPanel.add(btn);
@@ -149,9 +149,8 @@ public class UserProfile {
             button.setBackground(Color.WHITE);
             button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-            button.addActionListener(e ->
+            button.addActionListener(ignored ->
                             JOptionPane.showMessageDialog(menuFrame, "Opening: " + option)
-                    // ➕ ή κάλεσε άλλη JFrame εδώ
             );
 
             menuFrame.add(button);
@@ -229,7 +228,7 @@ public class UserProfile {
             }
         });
 
-        closeBtn.addActionListener(e -> dialog.dispose());
+        closeBtn.addActionListener(ignored -> dialog.dispose());
 
         Font btnFont = new Font("Arial", Font.PLAIN, 16);
         for (JButton btn : new JButton[]{viewBtn, addBtn, editBtn, closeBtn}) {

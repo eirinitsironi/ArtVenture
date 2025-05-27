@@ -6,6 +6,7 @@ import java.awt.*;
 public class QuizMenu extends JPanel {
 
     public QuizMenu(JFrame frame) {
+        frame.setTitle("ArtVenture - Quiz");
         setLayout(null);
         Color backgroundColor = new Color(0xD3DFB7);
         Color iconColor = new Color(0xC4D2A4);
@@ -53,6 +54,18 @@ public class QuizMenu extends JPanel {
         add(startQuizButton);
         add(previousQuizButton);
 
+        JButton backButton = new JButton("<");
+        backButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        backButton.setFocusPainted(false);
+        backButton.setBorderPainted(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setBounds(10, 20, 50, 30);
+        backButton.addActionListener(ignored -> {
+            frame.setContentPane(new MenuPage(frame));
+            frame.revalidate();
+            frame.repaint();
+        });
+
         // === Bottom Navigation Bar ===
         JPanel navBar = new JPanel();
         navBar.setLayout(new GridLayout(1, 2));
@@ -72,6 +85,7 @@ public class QuizMenu extends JPanel {
             navBar.add(btn);
         }
 
+        add(backButton);
         add(navBar);
     }
 }

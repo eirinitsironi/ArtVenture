@@ -35,23 +35,17 @@ public class QuizList extends JPanel {
         JButton quiz1 = createQuizButton("Quiz 1", "#D0EACF");
         quiz1.setPreferredSize(new Dimension(Integer.MAX_VALUE, 110));
         quiz1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 110));
-        quiz1.addActionListener(ignored -> {
-            JOptionPane.showMessageDialog(frame, "Quiz 1 clicked!");
-        });
+        quiz1.addActionListener(ignored -> JOptionPane.showMessageDialog(frame, "Quiz 1 clicked!"));
 
         JButton quiz2 = createQuizButton("Quiz 2", "#F7F0C3");
         quiz2.setPreferredSize(new Dimension(Integer.MAX_VALUE, 110));
         quiz2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 110));
-        quiz2.addActionListener(ignored -> {
-            JOptionPane.showMessageDialog(frame, "Quiz 2 clicked!");
-        });
+        quiz2.addActionListener(ignored -> JOptionPane.showMessageDialog(frame, "Quiz 2 clicked!"));
 
         JButton quiz3 = createQuizButton("Quiz 3", "#DCC3F7");
         quiz3.setPreferredSize(new Dimension(Integer.MAX_VALUE, 110));
         quiz3.setMaximumSize(new Dimension(Integer.MAX_VALUE, 110));
-        quiz3.addActionListener(ignored -> {
-            JOptionPane.showMessageDialog(frame, "Quiz 3 clicked!");
-        });
+        quiz3.addActionListener(ignored -> JOptionPane.showMessageDialog(frame, "Quiz 3 clicked!"));
 
         quizzesPanel.add(quiz1);
         quizzesPanel.add(quiz2);

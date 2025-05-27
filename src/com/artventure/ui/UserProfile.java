@@ -4,19 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
+public class UserProfile extends JPanel {
 
-public class UserProfile {
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(UserProfile::createAndShowGUI);
-    }
-
-    public static void createAndShowGUI() {
-        JFrame frame = new JFrame("User Profile");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 700);
-        frame.setLayout(null);
-        frame.getContentPane().setBackground(new Color(0xD3DFB7)); // Background
+    public UserProfile() {
+        setLayout(null);
+        setBackground(new Color(0xD3DFB7));
 
         Color backgroundColor = new Color(0xD3DFB7);
         Color iconColor = new Color(0xC4D2A4);
@@ -43,7 +35,6 @@ public class UserProfile {
             btnY += 45;
         }
 
-        // === Name Label ===
         JLabel nameLabel = new JLabel("Name Lastname");
         nameLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         nameLabel.setBounds(60, 35, 200, 30);
@@ -70,7 +61,7 @@ public class UserProfile {
         pointsLabel.setBounds(310, 105, 60, 25);
         topPanel.add(pointsLabel);
 
-        frame.add(topPanel);
+        add(topPanel);
 
         // === Middle Buttons Panel ===
         JPanel middlePanel = new JPanel();
@@ -109,7 +100,7 @@ public class UserProfile {
             y += 50;
         }
 
-        frame.add(middlePanel);
+        add(middlePanel);
 
         // === Bottom Navigation Bar ===
         JPanel navBar = new JPanel();
@@ -130,8 +121,6 @@ public class UserProfile {
             navBar.add(btn);
         }
 
-        frame.add(navBar);
-
-        frame.setVisible(true);
+        add(navBar);
     }
 }

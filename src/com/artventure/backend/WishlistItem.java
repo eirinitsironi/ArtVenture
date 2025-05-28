@@ -1,3 +1,4 @@
+package backend;
 public class WishlistItem {
     private String id;
     private String type;

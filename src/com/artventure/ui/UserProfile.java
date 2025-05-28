@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import backend.User;
+import ui.SearchPanel;
 
 public class UserProfile {
 
@@ -30,7 +31,7 @@ public class UserProfile {
         topPanel.setBackground(backgroundColor);
         topPanel.setBounds(0, 0, 400, 180);
 
-        String[] icons = {"≡", "🛒", "🔔"};
+        String[] icons = {"≡", "🛒", "🔔", "🔍"};
         int btnY = 0;
 
         for (String icon : icons) {
@@ -44,6 +45,12 @@ public class UserProfile {
 
             if (icon.equals("≡")) {
                 btn.addActionListener(ignored -> MenuPage.open());
+            } else if (icon.equals("🔍")) {
+                btn.addActionListener(ignored -> {
+                    frame.setContentPane(new SearchPanel(frame));
+                    frame.revalidate();
+                    frame.repaint();
+                });
             }
 
             topPanel.add(btn);
@@ -136,6 +143,12 @@ public class UserProfile {
             navBar.add(btn);
         }
 
+        homeButton.addActionListener(e -> {
+            frame.setContentPane(new SearchPanel(frame));
+            frame.revalidate();
+            frame.repaint();
+        });
+
         frame.add(navBar);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -158,7 +171,7 @@ public class UserProfile {
             button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
             button.addActionListener(ignored ->
-                            JOptionPane.showMessageDialog(menuFrame, "Opening: " + option)
+                    JOptionPane.showMessageDialog(menuFrame, "Opening: " + option)
             );
 
             menuFrame.add(button);

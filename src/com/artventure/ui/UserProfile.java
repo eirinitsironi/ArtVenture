@@ -31,7 +31,7 @@ public class UserProfile {
         topPanel.setBackground(backgroundColor);
         topPanel.setBounds(0, 0, 400, 180);
 
-        String[] icons = {"≡", "🛒", "🔔", "🔍"};
+        String[] icons = {"≡", "🛒", "🔔"};
         int btnY = 0;
 
         for (String icon : icons) {
@@ -42,16 +42,6 @@ public class UserProfile {
             btn.setBorderPainted(false);
             btn.setFocusPainted(false);
             btn.setOpaque(true);
-
-            if (icon.equals("≡")) {
-                btn.addActionListener(ignored -> MenuPage.open());
-            } else if (icon.equals("🔍")) {
-                btn.addActionListener(ignored -> {
-                    frame.setContentPane(new SearchPanel(frame));
-                    frame.revalidate();
-                    frame.repaint();
-                });
-            }
 
             topPanel.add(btn);
             btnY += 45;

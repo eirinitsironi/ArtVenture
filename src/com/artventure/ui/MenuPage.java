@@ -1,16 +1,11 @@
 package ui;
-
 import javax.swing.*;
 import java.awt.*;
-import ui.MyWrappedPage;
 
-public class MenuPage {
-    public static void open() {
-        JFrame frame = new JFrame("Menu");
-        frame.setSize(400, 700);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(null);
-        frame.getContentPane().setBackground(new Color(0xD3DFB7));
+public class MenuPage extends JPanel {
+    public MenuPage(JFrame frame) {
+        setLayout(null);
+        setBackground(new Color(0xD3DFB7));
 
         Color backgroundColor = new Color(0xD3DFB7);
         Color middleButtonColor = new Color(0xE6E6FA);
@@ -27,7 +22,7 @@ public class MenuPage {
         backBtn.setFocusPainted(false);
         backBtn.setBorderPainted(false);
         backBtn.setContentAreaFilled(false);
-        backBtn.addActionListener(e -> frame.dispose());
+        backBtn.addActionListener(ignored -> frame.dispose());
         topPanel.add(backBtn);
 
         JLabel title = new JLabel("Menu", SwingConstants.CENTER);
@@ -35,11 +30,11 @@ public class MenuPage {
         title.setBounds(0, 20, 400, 30);
         topPanel.add(title);
 
-        frame.add(topPanel);
+        add(topPanel);
 
         // Menu Buttons Panel
         JPanel middlePanel = new JPanel(null);
-        middlePanel.setBounds(0, 250, 400, 200);
+        middlePanel.setBounds(0, 250, 386, 200);
         middlePanel.setBackground(backgroundColor);
 
         String[] buttonLabels = {"Preference quiz", "My wrapped", "Find venues", "Make art"};
@@ -66,21 +61,26 @@ public class MenuPage {
             button.add(textLabel, BorderLayout.WEST);
             button.add(arrowLabel, BorderLayout.EAST);
 
-            button.addActionListener(e -> {
-                if (label.equals("My wrapped")) {
-                    MyWrappedPage.open();
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Opening: " + label);
-                    // Μπορείς να προσθέσεις αντίστοιχα actions για άλλα κουμπιά εδώ
+            button.addActionListener(ignored -> {
+                switch (label) {
+                    case "Preference quiz":
+                        frame.setContentPane(new QuizMenu(frame));
+                        frame.revalidate();
+                        frame.repaint();
+                        break;
+                    case "My wrapped":
+                        MyWrappedPage.open();
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(frame, "Opening: " + label);
                 }
             });
-
 
             middlePanel.add(button);
             y += 50;
         }
 
-        frame.add(middlePanel);
+        add(middlePanel);
 
         // Bottom Navigation Bar
         JPanel navBar = new JPanel(new GridLayout(1, 2));
@@ -99,8 +99,14 @@ public class MenuPage {
             navBar.add(btn);
         }
 
-        frame.add(navBar);
+        add(navBar);
+    }
 
+    public static void open() {
+        JFrame frame = new JFrame("Menu");
+        frame.setSize(400, 700);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setContentPane(new MenuPage(frame));
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }

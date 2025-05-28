@@ -2,99 +2,215 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URL;
 
 public class MyWrappedPage {
+    private static JFrame frame;
+    private static JPanel mainPanel;
+    private static CardLayout cardLayout;
 
     public static void open() {
-        JFrame frame = new JFrame("My Wrapped");
+        frame = new JFrame("My Wrapped");
         frame.setSize(400, 700);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(null);
         frame.getContentPane().setBackground(new Color(0xD3DFB7));
 
-        Color backgroundColor = new Color(0xD3DFB7);
-        Color buttonColor = new Color(0xE6E6FA);
-        Color navBarColor = new Color(0xC4D2A4);
+        // Create main panel with CardLayout for switching between views
+        cardLayout = new CardLayout();
+        mainPanel = new JPanel(cardLayout);
+        mainPanel.setBackground(new Color(0xD3DFB7));
 
-        // Top Panel
-        JPanel topPanel = new JPanel(null);
-        topPanel.setBounds(0, 0, 400, 70);
-        topPanel.setBackground(backgroundColor);
+        // Create the paintings panel
+        JPanel paintingsPanel = createPaintingsPanel();
+        mainPanel.add(paintingsPanel, "paintings");
 
-        JButton backBtn = new JButton("<");
-        backBtn.setFont(new Font("Arial", Font.PLAIN, 20));
-        backBtn.setBounds(10, 20, 50, 30);
-        backBtn.setFocusPainted(false);
-        backBtn.setBorderPainted(false);
-        backBtn.setContentAreaFilled(false);
-        backBtn.addActionListener(e -> frame.dispose());
-        topPanel.add(backBtn);
+        // Create the artists panel
+        JPanel artistsPanel = createArtistsPanel();
+        mainPanel.add(artistsPanel, "artists");
 
-        JLabel title = new JLabel("My wrapped", SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 20));
-        title.setBounds(0, 20, 400, 30);
-        topPanel.add(title);
-
-        frame.add(topPanel);
-
-        // Intro Text
-        JLabel introText = new JLabel("<html><center>Welcome to this years My wrapped!<br>" +
-                "Click start to see your top paintings, artists and museums this year!</center></html>",
-                SwingConstants.CENTER);
-        introText.setFont(new Font("Arial", Font.PLAIN, 14));
-        introText.setBounds(25, 100, 350, 100);
-        frame.add(introText);
-
-        // Start Button
-        JButton startButton = new JButton("Start");
-        startButton.setFont(new Font("Arial", Font.BOLD, 14));
-        startButton.setBounds(120, 230, 150, 50);
-        startButton.setBackground(buttonColor);
-        startButton.setFocusPainted(false);
-        startButton.setBorderPainted(false);
-        startButton.setOpaque(true);
-        startButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        frame.add(startButton);
-
-        startButton.addActionListener(e -> {
-            // Έλεγχος αν έχει αρκετή δραστηριότητα
-            boolean hasActivity = checkUserActivity();
-
-            if (hasActivity) {
-                JOptionPane.showMessageDialog(frame, "Generating your wrapped...");
-                // συνέχισε με τις υπόλοιπες οθόνες
-                // openTopPaintings(); etc.
-            } else {
-                JOptionPane.showMessageDialog(frame, "You don’t have enough activity to generate your wrapped. Come back later.");
-            }
-        });
-
-        // Bottom Navigation Bar
-        JPanel navBar = new JPanel(new GridLayout(1, 2));
-        navBar.setBounds(0, 630, 400, 40);
-        navBar.setBackground(navBarColor);
-
-        JButton compassBtn = new JButton("🧭");
-        JButton userBtn = new JButton("👤");
-
-        for (JButton btn : new JButton[]{compassBtn, userBtn}) {
-            btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
-            btn.setFocusPainted(false);
-            btn.setBorderPainted(false);
-            btn.setBackground(navBarColor);
-            btn.setOpaque(true);
-            navBar.add(btn);
-        }
-
-        frame.add(navBar);
-
+        frame.add(mainPanel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private static boolean checkUserActivity() {
-        // TODO: Υλοποίηση ελέγχου αν έχει ο χρήστης επαρκή δραστηριότητα
-        // Προς το παρόν επιστρέφει τυχαία true για δοκιμή
-        return Math.random() > 0.5;
+    private static JPanel createPaintingsPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBackground(new Color(0xD3DFB7));
+
+        JLabel title = new JLabel("My top paintings", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 25));
+        title.setBounds(0, 20, 400, 30);
+        panel.add(title);
+
+        // Dummy data for paintings
+        String[] paintingTitles = {"Detail of Garden at Giverny (1900)", "The Starry Night",
+                "Self-Portrait on the Mexican-American Border, 1932", "The Kiss"};
+        String[] artistNames = {"Claude Monet", "Vincent van Gogh", "Frida Kahlo", "Gustav Klimt"};
+        String[] imageResourcePaths = {
+                "/ui/resources/painting1.jpg",
+                "/ui/resources/painting2.jpg",
+                "/ui/resources/painting3.jpeg",
+                "/ui/resources/painting4.png"
+        };
+
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setBackground(new Color(0xD3DFB7));
+
+        for (int i = 0; i < paintingTitles.length; i++) {
+            JPanel item = new JPanel(new BorderLayout());
+            item.setPreferredSize(new Dimension(360, 80));
+            item.setBackground(new Color(0xD3DFB7));
+            item.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 10));
+
+            // Image
+            JLabel imgLabel = new JLabel();
+            URL imgUrl = MyWrappedPage.class.getResource(imageResourcePaths[i]);
+
+            if (imgUrl != null) {
+                ImageIcon icon = new ImageIcon(imgUrl);
+                Image scaled = icon.getImage().getScaledInstance(50, 60, Image.SCALE_SMOOTH);
+                imgLabel.setIcon(new ImageIcon(scaled));
+            } else {
+                imgLabel.setText("No image");
+            }
+
+            imgLabel.setPreferredSize(new Dimension(60, 60));
+            item.add(imgLabel, BorderLayout.WEST);
+
+            // Text wrapper
+            JPanel textWrapper = new JPanel(new BorderLayout());
+            textWrapper.setOpaque(false);
+            textWrapper.setBorder(BorderFactory.createEmptyBorder(0, 18, 0, 0));
+
+            JLabel textLabel = new JLabel("<html>" + (i + 1) + ". " + paintingTitles[i] + "<br/>" + artistNames[i] + "</html>");
+            textLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+            textWrapper.add(textLabel, BorderLayout.CENTER);
+
+            item.add(textWrapper, BorderLayout.CENTER);
+
+            String artistNameForClick = artistNames[i];
+
+            // Click → artist profile
+            item.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    ArtistProfilePage.open(artistNameForClick);
+                }
+            });
+
+            listPanel.add(item);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        scrollPane.setBounds(0, 60, 400, 500);
+        scrollPane.setBorder(null);
+        panel.add(scrollPane);
+
+        JButton nextBtn = new JButton("Next");
+        nextBtn.setBounds(150, 580, 100, 30);
+        nextBtn.setBackground(new Color(0xE6E6FA));
+        nextBtn.addActionListener(ignored -> cardLayout.show(mainPanel, "artists"));
+        panel.add(nextBtn);
+        JButton restartBtn = new JButton("🔁 Start Over");
+        restartBtn.setBounds(140, 620, 120, 30);
+        restartBtn.setBackground(new Color(0xF5DEB3));
+        restartBtn.setFocusPainted(false);
+        restartBtn.addActionListener(ignored -> {
+            frame.dispose();
+            open();
+        });
+        panel.add(restartBtn);
+
+
+        return panel;
+    }
+
+    private static JPanel createArtistsPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBackground(new Color(0xD3DFB7));
+
+        JLabel title = new JLabel("My top artists", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 25));
+        title.setBounds(0, 20, 400, 30);
+        panel.add(title);
+
+        // Dummy data for artists
+        String[] artistNames = {"Jadé Fadojutimi", "María Berrío", "Tony Clark", "Despina Stokou)"};
+        String[] imageResourcePaths = {
+                "/ui/resources/artist1.png",
+                "/ui/resources/artist2.png",
+                "/ui/resources/artist3.png",
+                "/ui/resources/artist4.png"
+        };
+
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setBackground(new Color(0xD3DFB7));
+
+        for (int i = 0; i < artistNames.length; i++) {
+            JPanel item = new JPanel(new BorderLayout());
+            item.setPreferredSize(new Dimension(80, 80));
+            item.setBackground(new Color(0xD3DFB7));
+            item.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 10));
+
+            // Image
+            JLabel imgLabel = new JLabel();
+            URL imgUrl = MyWrappedPage.class.getResource(imageResourcePaths[i]);
+
+            if (imgUrl != null) {
+                ImageIcon icon = new ImageIcon(imgUrl);
+                Image scaled = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                imgLabel.setIcon(new ImageIcon(scaled));
+            } else {
+                imgLabel.setText("No image");
+            }
+
+            imgLabel.setPreferredSize(new Dimension(60, 60));
+            item.add(imgLabel, BorderLayout.WEST);
+
+            // Text
+            JLabel textLabel = new JLabel((i + 1) + ". " + artistNames[i]);
+            textLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+            textLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+            item.add(textLabel, BorderLayout.CENTER);
+
+            String artistNameForClick = artistNames[i];
+
+            // Click → artist profile
+            item.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    ArtistProfilePage.open(artistNameForClick);
+                }
+            });
+
+            listPanel.add(item);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        scrollPane.setBounds(0, 60, 400, 500);
+        scrollPane.setBorder(null);
+        panel.add(scrollPane);
+
+        JButton backBtn = new JButton("Back");
+        backBtn.setBounds(150, 580, 100, 30);
+        backBtn.setBackground(new Color(0xE6E6FA));
+        backBtn.addActionListener(ignored -> cardLayout.show(mainPanel, "paintings"));
+        panel.add(backBtn);
+        JButton restartBtn = new JButton("🔁 Start Over");
+        restartBtn.setBounds(140, 620, 120, 30);
+        restartBtn.setBackground(new Color(0xF5DEB3));
+        restartBtn.setFocusPainted(false);
+        restartBtn.addActionListener(ignored -> {
+            frame.dispose();
+            open();
+        });
+        panel.add(restartBtn);
+
+
+        return panel;
     }
 }

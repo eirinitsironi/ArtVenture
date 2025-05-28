@@ -9,25 +9,43 @@ import java.util.List;
 public class UserProfile {
 
     private static final List<ReviewPopup.ReviewData> userReviews = new ArrayList<>();
+    private static JFrame frame;
+    private static JPanel mainContentPanel;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(UserProfile::createAndShowGUI);
     }
 
     public static void createAndShowGUI() {
-        JFrame frame = new JFrame("User Profile");
+        frame = new JFrame("User Profile");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 700);
-        frame.setLayout(null);
+        frame.setLayout(new BorderLayout());
         frame.getContentPane().setBackground(new Color(0xD3DFB7));
 
-        Color backgroundColor = new Color(0xD3DFB7);
-        Color iconColor = new Color(0xC4D2A4);
-        Color middleButtonColor = new Color(0xE6E6FA);
+        // Κύριο panel με CardLayout
+        mainContentPanel = new JPanel(new CardLayout());
+        mainContentPanel.setBackground(new Color(0xD3DFB7));
 
+        // Προσθήκη των panels στο card layout
+        mainContentPanel.add(createProfilePanel(), "profile");
+        mainContentPanel.add(createSearchPanel(), "search");
+
+        frame.add(mainContentPanel, BorderLayout.CENTER);
+        frame.add(createNavBar(), BorderLayout.SOUTH);
+
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    private static JPanel createProfilePanel() {
+        JPanel profilePanel = new JPanel(null);
+        profilePanel.setBackground(new Color(0xD3DFB7));
+
+        // Top panel
         JPanel topPanel = new JPanel(null);
-        topPanel.setBackground(backgroundColor);
         topPanel.setBounds(0, 0, 400, 180);
+        topPanel.setBackground(new Color(0xD3DFB7));
 
         String[] icons = {"≡", "🛒", "🔔"};
         int btnY = 0;
@@ -36,7 +54,7 @@ public class UserProfile {
             JButton btn = new JButton(icon);
             btn.setFont(new Font("UI Emoji", Font.PLAIN, 20));
             btn.setBounds(0, btnY, 55, 55);
-            btn.setBackground(iconColor);
+            btn.setBackground(new Color(0xC4D2A4));
             btn.setBorderPainted(false);
             btn.setFocusPainted(false);
             btn.setOpaque(true);
@@ -71,11 +89,12 @@ public class UserProfile {
         pointsLabel.setBounds(310, 105, 60, 25);
         topPanel.add(pointsLabel);
 
-        frame.add(topPanel);
+        profilePanel.add(topPanel);
 
+        // Middle buttons
         JPanel middlePanel = new JPanel(null);
         middlePanel.setBounds(0, 250, 400, 200);
-        middlePanel.setBackground(backgroundColor);
+        middlePanel.setBackground(new Color(0xD3DFB7));
 
         String[] buttonLabels = {"My posts", "Visit history", "Wishlist", "Reviews"};
         int y = 0;
@@ -84,7 +103,7 @@ public class UserProfile {
             JButton button = new JButton();
             button.setLayout(new BorderLayout());
             button.setBounds(0, y, 386, 50);
-            button.setBackground(middleButtonColor);
+            button.setBackground(new Color(0xE6E6FA));
             button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
             button.setBorderPainted(true);
             button.setFocusPainted(false);
@@ -110,55 +129,89 @@ public class UserProfile {
             y += 50;
         }
 
-        frame.add(middlePanel);
-
-        JPanel navBar = new JPanel(new GridLayout(1, 2));
-        navBar.setBounds(0, 630, 400, 40);
-        navBar.setBackground(iconColor);
-
-        JButton homeButton = new JButton("🧭");
-        JButton profileButton = new JButton("👤");
-
-        for (JButton btn : new JButton[]{homeButton, profileButton}) {
-            btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
-            btn.setFocusPainted(false);
-            btn.setBorderPainted(false);
-            btn.setBackground(iconColor);
-            btn.setOpaque(true);
-            navBar.add(btn);
-        }
-
-        frame.add(navBar);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        profilePanel.add(middlePanel);
+        return profilePanel;
     }
 
-    public static void openSideMenuPage() {
-        JFrame menuFrame = new JFrame("Menu");
-        menuFrame.setSize(300, 400);
-        menuFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        menuFrame.setLayout(new GridLayout(4, 1, 10, 10));
-        menuFrame.getContentPane().setBackground(new Color(0xF0F0F0));
+    private static JPanel createSearchPanel() {
+        JPanel searchPanel = new JPanel(null);
+        searchPanel.setBackground(new Color(0xD3DFB7));
 
-        String[] options = {"Preference Quiz", "My Wrapped", "Find Venues", "Make Art"};
+        JTextField searchField = new JTextField();
+        searchField.setFont(new Font("Arial", Font.PLAIN, 18));
+        searchField.setBounds(14, 55, 360, 40);
+        searchField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true),
+                BorderFactory.createEmptyBorder(10, 15, 10, 15)
+        ));
+        searchField.setBackground(Color.WHITE);
+        searchField.setOpaque(true);
 
-        for (String option : options) {
-            JButton button = new JButton(option);
-            button.setFont(new Font("Arial", Font.PLAIN, 18));
-            button.setFocusPainted(false);
-            button.setBackground(Color.WHITE);
-            button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        // Ίσως θες placeholder (προαιρετικό):
+// Placeholder συμπεριφορά
+        String placeholder = "Search...";
+        searchField.setForeground(Color.GRAY);
+        searchField.setText(placeholder);
 
-            button.addActionListener(e ->
-                            JOptionPane.showMessageDialog(menuFrame, "Opening: " + option)
-                    // ➕ ή κάλεσε άλλη JFrame εδώ
-            );
+        searchField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (searchField.getText().equals(placeholder)) {
+                    searchField.setText("");
+                    searchField.setForeground(Color.BLACK);
+                }
+            }
 
-            menuFrame.add(button);
-        }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (searchField.getText().isEmpty()) {
+                    searchField.setText(placeholder);
+                    searchField.setForeground(Color.GRAY);
+                }
+            }
+        });
 
-        menuFrame.setLocationRelativeTo(null);
-        menuFrame.setVisible(true);
+
+        searchPanel.add(searchField);
+        return searchPanel;
+    }
+
+    private static JPanel createNavBar() {
+        JPanel navBar = new JPanel(new GridLayout(1, 3));
+        navBar.setBackground(new Color(0xC4D2A4));
+        navBar.setPreferredSize(new Dimension(400, 40));
+
+        JButton homeButton = new JButton("🧭");
+        homeButton.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
+        homeButton.setFocusPainted(false);
+        homeButton.setBorderPainted(false);
+        homeButton.setBackground(new Color(0xC4D2A4));
+        homeButton.setOpaque(true);
+        homeButton.addActionListener(e -> switchToCard("search"));
+
+        JButton empty = new JButton();
+        empty.setEnabled(false);
+        empty.setOpaque(false);
+        empty.setBorderPainted(false);
+
+        JButton profileButton = new JButton("👤");
+        profileButton.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
+        profileButton.setFocusPainted(false);
+        profileButton.setBorderPainted(false);
+        profileButton.setBackground(new Color(0xC4D2A4));
+        profileButton.setOpaque(true);
+        profileButton.addActionListener(e -> switchToCard("profile"));
+
+        navBar.add(homeButton);
+        navBar.add(empty);
+        navBar.add(profileButton);
+
+        return navBar;
+    }
+
+    private static void switchToCard(String name) {
+        CardLayout cl = (CardLayout) (mainContentPanel.getLayout());
+        cl.show(mainContentPanel, name);
     }
 
     public static void showReviewDialog(JFrame parentFrame) {

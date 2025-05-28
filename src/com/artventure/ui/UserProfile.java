@@ -54,7 +54,6 @@ public class UserProfile {
         nameLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         nameLabel.setBounds(60, 35, 200, 30);
         topPanel.add(nameLabel);
-
         URL imageUrl = UserProfile.class.getResource("/ui/resources/profile.png");
         if (imageUrl != null) {
             ImageIcon icon = new ImageIcon(imageUrl);
@@ -106,7 +105,7 @@ public class UserProfile {
             button.add(arrowLabel, BorderLayout.EAST);
 
             if (label.equals("My posts")) {
-                button.addActionListener(e -> {
+                button.addActionListener(ignored -> {
                     frame.setContentPane(new MyPostsPanel(frame, user));
                     frame.revalidate();
                     frame.repaint();

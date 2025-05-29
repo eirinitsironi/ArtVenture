@@ -1,7 +1,7 @@
 package ui;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class ChoosePostPanel extends JPanel {
 
@@ -49,8 +49,14 @@ public class ChoosePostPanel extends JPanel {
         eventBtn.setBounds(100, 210, 200, 40);
         add(eventBtn);
 
-        paintingBtn.addActionListener(e -> new MakePaintingPostUI());
-        eventBtn.addActionListener(e -> new MakeEventPostUI());
+        paintingBtn.addActionListener(e -> {
+            frame.setContentPane(new MakePaintingPostPanel(frame));
+            frame.revalidate();
+        });
+        eventBtn.addActionListener(e -> {
+            frame.setContentPane(new MakeEventPostPanel(frame));
+            frame.revalidate();
+        });
 
         // Navigation Bar
         JPanel navBar = createNavigationBar();

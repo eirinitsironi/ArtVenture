@@ -43,6 +43,10 @@ public class UserProfile {
             btn.setFocusPainted(false);
             btn.setOpaque(true);
 
+            if (icon.equals("≡")) {
+                btn.addActionListener(ignored -> MenuPage.open());
+            }
+
             topPanel.add(btn);
             btnY += 45;
         }

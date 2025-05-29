@@ -41,7 +41,7 @@ public class Main {
                     mainMenu(user);
                     break;
                 case "3":
-                    System.out.println("Venture not implemented yet.");
+                    ventureFeed(user);
                     break;
                 case "4":
                     cartMenu(user);
@@ -228,139 +228,148 @@ public class Main {
         }
     }
 
-      private static void createPost(User user, List<Venue> venues) {
+private static void createPost(User user, List<Venue> venues) {
     System.out.println("\n--- Create Post ---");
     System.out.println("1. Painting");
     System.out.println("2. Event");
     System.out.print("Choose type: ");
     String type = scanner.nextLine();
 
-    if (type.equals("1")) {
-        System.out.print("Title: ");
-        String title = scanner.nextLine();
+    switch (type) {
+        case "1":
+            createPaintingPost(user);
+            break;
+        case "2":
+            createEventPost(user, venues);
+            break;
+        default:
+            System.out.println("Invalid choice.");
+    }
+}
 
-        System.out.print("Image path: ");
-        String imagePath = scanner.nextLine();
+private static void createPaintingPost(User user) {
+    System.out.print("Title: ");
+    String title = scanner.nextLine();
 
-        System.out.print("Category: ");
-        String category = scanner.nextLine();
+    System.out.print("Image path: ");
+    String imagePath = scanner.nextLine();
 
-        System.out.print("Caption: ");
-        String caption = scanner.nextLine();
+    System.out.print("Category: ");
+    String category = scanner.nextLine();
 
-        double price;
-        while (true){
-            System.out.print("Price: ");
-            try {
-                price = Double.parseDouble(scanner.nextLine());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid price format. Please enter a numeric value.");
-            }
-        }
+    System.out.print("Caption: ");
+    String caption = scanner.nextLine();
 
-        Painting painting = new Painting(title, imagePath, category, caption, price);
+    double price = promptForDouble("Price");
 
-        if (painting.validate()) {
-            painting.preview();
-            user.addPost(painting);
-            System.out.println("Painting post saved.");
-        } else {
-            System.out.println("Missing required fields.");
-        }
+    String id = UUID.randomUUID().toString();
+    Painting painting = new Painting(id, title, category, imagePath, caption, price);
 
-    } else if (type.equals("2")) {
-        System.out.print("Event name: ");
-        String eventName = scanner.nextLine();
-
-        System.out.println("Available Venues:");
-        for (int i = 0; i < venues.size(); i++) {
-            System.out.println((i + 1) + ". " + venues.get(i).getName());
-        }
-
-        int venueIndex = -1;
-        while (venueIndex < 0 || venueIndex >= venues.size()) {
-            System.out.print("Select venue by number: ");
-            try {
-                venueIndex = Integer.parseInt(scanner.nextLine()) - 1;
-                if (venueIndex < 0 || venueIndex >= venues.size()) {
-                    System.out.println("Invalid selection.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
-            }
-        }
-
-        Venue venue = venues.get(venueIndex);
-
-        System.out.print("Image path: ");
-        String imagePath = scanner.nextLine();
-
-        LocalDate date = null;
-        while (true) {
-            System.out.print("Date (YYYY-MM-DD): ");
-            String dateInput = scanner.nextLine();
-            try {
-                date = LocalDate.parse(dateInput);
-                if (date.isBefore(LocalDate.now())) {
-                    System.out.println("Date cannot be in the past.");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
-            }
-        }
-
-        LocalTime time = null;
-        while (true) {
-            System.out.print("Time (HH:MM): ");
-            String timeInput = scanner.nextLine();
-            try {
-                time = LocalTime.parse(timeInput);
-                break;
-            } catch (Exception e) {
-                System.out.println("Invalid time format. Please use HH:MM (24-hour).");
-            }
-        }
-
-        LocalDateTime dateTime = LocalDateTime.of(date, time);
-
-        System.out.print("Category: ");
-        String category = scanner.nextLine();
-
-        double ticketPrice = 0;
-        while (true) {
-            System.out.print("Ticket Price: ");
-            String priceInput = scanner.nextLine();
-            try {
-                ticketPrice = Double.parseDouble(priceInput);
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid price. Please enter a number (e.g., 12.50).");
-            }
-        }
-
-        System.out.print("Address: ");
-        String address = scanner.nextLine();
-
-        Event event = new Event(eventName, venue, imagePath, dateTime, category, ticketPrice, address);
-
-        if (event.validate()) {
-            event.preview();
-            System.out.print("Confirm post? (yes/no): ");
-            if (scanner.nextLine().equalsIgnoreCase("yes")) {
-                user.addPost(event);
-                System.out.println("Event post saved.");
-            } else {
-                System.out.println("Cancelled.");
-            }
-        } else {
-            System.out.println("Missing required fields.");
-        }
-
+    if (painting.validate()) {
+        painting.preview();
+        user.addPost(painting);
+        System.out.println("Painting post saved.");
     } else {
-        System.out.println("Invalid choice.");
+        System.out.println("Missing required fields.");
+    }
+}
+
+private static void createEventPost(User user, List<Venue> venues) {
+    System.out.print("Event name: ");
+    String eventName = scanner.nextLine();
+
+    Venue venue = chooseVenue(venues);
+    if (venue == null) return;
+
+    System.out.print("Image path: ");
+    String imagePath = scanner.nextLine();
+
+    LocalDate date = promptForDate("Date (YYYY-MM-DD)");
+    LocalTime time = promptForTime("Time (HH:MM)");
+
+    LocalDateTime dateTime = LocalDateTime.of(date, time);
+
+    System.out.print("Category: ");
+    String category = scanner.nextLine();
+
+    double ticketPrice = promptForDouble("Ticket Price");
+
+    System.out.print("Address: ");
+    String address = scanner.nextLine();
+
+    String id = UUID.randomUUID().toString();
+    Event event = new Event(id, eventName, venue, imagePath, dateTime, category, ticketPrice, address);
+
+    if (event.validate()) {
+        event.preview();
+        System.out.print("Confirm post? (yes/no): ");
+        if (scanner.nextLine().equalsIgnoreCase("yes")) {
+            user.addPost(event);
+            System.out.println("Event post saved.");
+        } else {
+            System.out.println("Cancelled.");
+        }
+    } else {
+        System.out.println("Missing required fields.");
+    }
+}
+
+private static double promptForDouble(String prompt) {
+    while (true) {
+        System.out.print(prompt + ": ");
+        try {
+            return Double.parseDouble(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid format. Please enter a numeric value.");
+        }
+    }
+}
+
+private static LocalDate promptForDate(String prompt) {
+    while (true) {
+        System.out.print(prompt + ": ");
+        try {
+            LocalDate date = LocalDate.parse(scanner.nextLine());
+            if (date.isBefore(LocalDate.now())) {
+                System.out.println("Date cannot be in the past.");
+            } else {
+                return date;
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid date format. Use YYYY-MM-DD.");
+        }
+    }
+}
+
+private static LocalTime promptForTime(String prompt) {
+    while (true) {
+        System.out.print(prompt + ": ");
+        try {
+            return LocalTime.parse(scanner.nextLine());
+        } catch (Exception e) {
+            System.out.println("Invalid time format. Use HH:MM (24-hour).");
+        }
+    }
+}
+
+private static Venue chooseVenue(List<Venue> venues) {
+    System.out.println("Available Venues:");
+    for (int i = 0; i < venues.size(); i++) {
+        System.out.println((i + 1) + ". " + venues.get(i).getName());
+    }
+
+    while (true) {
+        System.out.print("Select venue by number: ");
+        try {
+            int index = Integer.parseInt(scanner.nextLine()) - 1;
+            if (index >= 0 && index < venues.size()) {
+                return venues.get(index);
+            } else {
+                System.out.println("Invalid selection.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a valid number.");
+        }
     }
 }
 
@@ -832,7 +841,7 @@ public static void findVenues(List<Venue> venues, Balance userBalance) {
         System.out.println("Address: " + selectedVenue.getAddress());
         System.out.println("Contact: " + selectedVenue.getContactInfo());
         System.out.println("Available Dates: " + selectedVenue.getAvailableDates());
-        System.out.println("Price: " + selectedVenue.getRentingPrice() + "€");
+        System.out.println("Price: " + selectedVenue.getRentingPrice() + "$");
         System.out.println(userBalance);
 
         System.out.print("\nDo you want to proceed with booking? (yes/no): ");
@@ -858,6 +867,7 @@ private static List<Venue> initializeVenues() {
     List<Venue> venues = new ArrayList<>();
 
     venues.add(new Venue(
+        UUID.randomUUID().toString(),
         "Venue A",
         "Athens",
         "210-1234567",
@@ -870,6 +880,7 @@ private static List<Venue> initializeVenues() {
     ));
 
     venues.add(new Venue(
+        UUID.randomUUID().toString(),
         "Venue B",
         "Thessaloniki",
         "2310-654321",
@@ -884,6 +895,195 @@ private static List<Venue> initializeVenues() {
     return venues;
 }
 
+private static final List<Post> ventureFeed = new ArrayList<>();
+
+private static void ventureFeed(User user) {
+    while (true) {
+        System.out.println("\n--- Venture ---");
+        System.out.println("1. -- Feed --");
+        System.out.println("2. -- Search --");
+        System.out.println("0. Back");
+        System.out.print("Choose option: ");
+
+        String input = scanner.nextLine();
+
+        switch (input) {
+            case "1":
+                showAllPosts(user);
+                break;
+            case "2":
+                searchPosts(user);
+                break;
+            case "0":
+                return;
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
+}
+
+private static void searchPosts(User user) {
+    System.out.println("\n--- Search Options ---");
+    System.out.println("1. Search by keywords");
+    System.out.println("2. Search by filters (Category/Date&Time/Price)");
+    System.out.println("0. Back");
+    System.out.print("Choose option: ");
+    String option = scanner.nextLine();
+
+    String keyword = null;
+    String category = null;
+    SearchFilter filter = new SearchFilter(null, null, 0f, Float.MAX_VALUE);
+
+    switch (option) {
+        case "1":
+            System.out.print("Enter keyword: ");
+            keyword = scanner.nextLine();
+            break;
+
+        case "2":
+            System.out.print("Enter category (or leave empty): ");
+            category = scanner.nextLine();
+
+            System.out.print("Filter by date from (yyyy-MM-dd HH:mm) (or leave empty): ");
+            String dateFromStr = scanner.nextLine();
+            LocalDateTime dateFrom = null;
+            if (!dateFromStr.isEmpty()) {
+                try {
+                    dateFrom = LocalDateTime.parse(dateFromStr.replace(" ", "T"));
+                } catch (Exception e) {
+                    System.out.println("Invalid format. Ignoring date from.");
+                }
+            }
+
+            System.out.print("Filter by date to (yyyy-MM-dd HH:mm) (or leave empty): ");
+            String dateToStr = scanner.nextLine();
+            LocalDateTime dateTo = null;
+            if (!dateToStr.isEmpty()) {
+                try {
+                    dateTo = LocalDateTime.parse(dateToStr.replace(" ", "T"));
+                } catch (Exception e) {
+                    System.out.println("Invalid format. Ignoring date to.");
+                }
+            }
+
+            System.out.print("Minimum price (or leave empty): ");
+            String minPriceStr = scanner.nextLine();
+            float minPrice = minPriceStr.isEmpty() ? 0f : Float.parseFloat(minPriceStr);
+
+            System.out.print("Maximum price (or leave empty): ");
+            String maxPriceStr = scanner.nextLine();
+            float maxPrice = maxPriceStr.isEmpty() ? Float.MAX_VALUE : Float.parseFloat(maxPriceStr);
+
+            filter = new SearchFilter(dateFrom, dateTo, minPrice, maxPrice);
+            break;
+
+        case "0":
+            return;
+
+        default:
+            System.out.println("Invalid option. Returning to menu.");
+            return;
+    }
+
+    Search search = new Search(keyword, category, filter);
+    List<SearchResult> results = search.performSearch(ventureFeed);
+
+    if (results.isEmpty()) {
+        System.out.println("\nNo results found.");
+        return;
+    }
+
+    System.out.println("\nSearch Results:");
+    for (int i = 0; i < results.size(); i++) {
+        int id = results.get(i).getId();
+        for (Post post : ventureFeed) {
+            if (post.hashCode() == id) {
+                System.out.println((i + 1) + ". " + post.getTitle() + " [" + post.getCategory() + "]");
+            }
+        }
+    }
+
+    System.out.print("Select a post to view details (0 to cancel): ");
+    String input = scanner.nextLine();
+    try {
+        int choice = Integer.parseInt(input);
+        if (choice > 0 && choice <= results.size()) {
+            int id = results.get(choice - 1).getId();
+            for (Post post : ventureFeed) {
+                if (post.hashCode() == id) {
+                    post.preview();
+                    System.out.print("View full details? (y/n): ");
+                    if (scanner.nextLine().equalsIgnoreCase("y")) {
+                        post.details();
+                    }
+
+                    if (post instanceof Painting) {
+                        System.out.print("Do you want to add this to your wishlist? (yes/no): ");
+                        if (scanner.nextLine().equalsIgnoreCase("yes")) {
+                            user.addToWishlist((Painting) post);
+                            System.out.println("Added to wishlist!");
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+    } catch (NumberFormatException e) {
+        System.out.println("Invalid input.");
+    }
+}
+
+private static void showAllPosts(User user) {
+    if (ventureFeed.isEmpty()) {
+        System.out.println("No posts available yet.");
+        return;
+    }
+
+    for (int i = 0; i < ventureFeed.size(); i++) {
+        Post post = ventureFeed.get(i);
+        System.out.println((i + 1) + ". " + post.getTitle() + " [" + post.getCategory() + "]");
+    }
+
+    System.out.print("Select a post to view details or 0 to go back: ");
+    String input = scanner.nextLine();
+
+    try {
+        int choice = Integer.parseInt(input);
+        if (choice == 0) return;
+
+        if (choice >= 1 && choice <= ventureFeed.size()) {
+            Post selectedPost = ventureFeed.get(choice - 1);
+            selectedPost.preview();
+
+            System.out.print("View full details? (y/n): ");
+            if (scanner.nextLine().equalsIgnoreCase("y")) {
+                selectedPost.details();
+            }
+
+            if (selectedPost instanceof Item) {
+                System.out.print("Do you want to add this to your wishlist? (yes/no): ");
+                if (scanner.nextLine().equalsIgnoreCase("yes")) {
+                    String type = selectedPost instanceof Painting ? "Painting" : "Event";
+                    String id = selectedPost.getId();
+
+                    if (!user.getWishlist().containsItem(id)) {
+                        WishlistItem wishlistItem = new WishlistItem(id, type, selectedPost);
+                        user.getWishlist().addItem(wishlistItem);
+                        System.out.println("Added to wishlist!");
+                    } else {
+                        System.out.println("This post is already in your wishlist.");
+                    }
+                }
+            }
+
+        } else {
+            System.out.println("Invalid choice.");
+        }
+    } catch (NumberFormatException e) {
+        System.out.println("Please enter a valid number.");
+    }
+}
 
 }
 

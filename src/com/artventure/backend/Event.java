@@ -10,9 +10,9 @@ public class Event extends Post {
     private double ticketPrice;
     private String address;
 
-    public Event(String eventName, Venue venue, String imagePath, LocalDateTime eventDateTime,
+    public Event(String id, String eventName, Venue venue, String imagePath, LocalDateTime eventDateTime,
                  String category, double ticketPrice, String address) {
-        super(eventName, category);
+        super(id, eventName, category);
         this.eventName = eventName;
         this.venue = venue;
         this.imagePath = imagePath;
@@ -21,7 +21,6 @@ public class Event extends Post {
         this.address = address;
     }
 
-    //Getters
     public String getEventName() {
         return eventName;
     }
@@ -46,7 +45,6 @@ public class Event extends Post {
         return address;
     }
 
-    // --- Post functionality ---
     @Override
     public void preview() {
         System.out.println("Event Preview: " + eventName + " @ " + venue.getName());

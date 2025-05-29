@@ -64,7 +64,8 @@ public class Cart implements Serializable {
 
     double total = getTotalCost();
 
-    Map<String, Integer> availableDiscounts = user.getPointsActivity().getAvailableDiscounts();
+    Map<String, Integer> availableDiscounts = Discount.getAvailableDiscounts(
+    user.getPointsActivity().getTotalPoints());
 
     if (!availableDiscounts.isEmpty()) {
         System.out.println("\nAvailable point-based discounts:");

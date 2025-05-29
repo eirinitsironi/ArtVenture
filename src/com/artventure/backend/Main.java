@@ -551,7 +551,8 @@ private static Venue chooseVenue(List<Venue> venues) {
     }
 
     private static void getAvailableDiscounts(User user) {
-    Map<String, Integer> availableDiscounts = user.getPointsActivity().getAvailableDiscounts();
+    Map<String, Integer> availableDiscounts = Discount.getAvailableDiscounts(
+    user.getPointsActivity().getTotalPoints());
 
     if (availableDiscounts.isEmpty()) {
         System.out.println("\nNo discounts available. Earn more points!");
@@ -638,6 +639,7 @@ private static Venue chooseVenue(List<Venue> venues) {
         System.out.println("2. Add Product");
         System.out.println("3. Remove Product");
         System.out.println("4. Checkout");
+        System.out.println("5. View Purchase History");
         System.out.println("0. Back");
 
         String input = scanner.nextLine();
@@ -705,6 +707,9 @@ private static Venue chooseVenue(List<Venue> venues) {
 
             case "4":
                 user.getCart().checkout(user);
+                break;
+            case "5":
+                user.getPurchaseHistory().showHistory();
                 break;
 
             case "0":

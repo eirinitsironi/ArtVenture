@@ -5,7 +5,7 @@ import java.util.*;
 public class ArtMaker {
     private static final Scanner scanner = new Scanner(System.in);
     private static final List<String> COLORS = List.of("R", "G", "B", "Y", "X", "W");
-    private static final List<String> TOOLS = List.of("Brush", "Pencil", "Spray", "Eraser");
+    List<String> tools = Tool.getAvailableTools();
     private static final List<Template> TEMPLATES = List.of(
         new Template("Landscape"),
         new Template("Portrait"),
@@ -94,14 +94,14 @@ public class ArtMaker {
 
     private static void selectTool(Drawing drawing) {
         System.out.println("Available tools:");
-        for (int i = 0; i < TOOLS.size(); i++) {
-            System.out.println((i + 1) + ". " + TOOLS.get(i));
+        for (int i = 0; i < Tool.getAvailableTools().size(); i++) {
+            System.out.println((i + 1) + ". " + Tool.getAvailableTools().get(i));
         }
-        System.out.print("Select tool (1-" + TOOLS.size() + "): ");
+        System.out.print("Select tool (1-" + Tool.getAvailableTools().size() + "): ");
         try {
             int toolIndex = Integer.parseInt(scanner.nextLine()) - 1;
-            if (toolIndex >= 0 && toolIndex < TOOLS.size()) {
-                drawing.setCurrentTool(TOOLS.get(toolIndex));
+            if (toolIndex >= 0 && toolIndex < Tool.getAvailableTools().size()) {
+                drawing.setCurrentTool(Tool.getAvailableTools().get(toolIndex));
             } else {
                 System.out.println("Invalid tool selection.");
             }

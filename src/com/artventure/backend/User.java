@@ -21,6 +21,7 @@ public class User implements Serializable {
     private List<Painting> ratedPaintings;
     private List<Review> reviews;
     private List<Rating> ratings;
+    private PurchaseHistory history = new PurchaseHistory();
 
     public User(int userID, String username) {
         this.userID = userID;
@@ -66,10 +67,6 @@ public class User implements Serializable {
 
     public List<Order> getOrders() {
         return orders;
-    }
-
-    public void addOrder(Order order) {
-        orders.add(order);
     }
 
     public Balance getBalance() {
@@ -199,8 +196,18 @@ public class User implements Serializable {
     if (painting != null) {
         WishlistItem item = new WishlistItem(painting.getId(), "Painting", painting);
         wishlist.addItem(item);
+        }
     }
-}
+
+   public void addOrder(Order order) {
+    orders.add(order);
+    history.addOrder(order);
+    }
+
+public PurchaseHistory getPurchaseHistory() {
+    return history;
+    }
+
 }
 
 

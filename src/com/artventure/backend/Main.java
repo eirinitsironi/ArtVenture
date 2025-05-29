@@ -1,6 +1,5 @@
 package backend;
 
-import ui.*;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,7 +34,7 @@ public class Main {
 
             switch (input) {
                 case "1":
-                    ui.UserProfile.createAndShowGUI();
+                    profileMenu(user);
                     break;
                 case "2":
                     mainMenu(user);

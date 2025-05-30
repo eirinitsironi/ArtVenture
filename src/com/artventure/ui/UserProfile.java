@@ -46,6 +46,13 @@ public class UserProfile {
                 btn.addActionListener(ignored -> MenuPage.open());
             }
 
+            if (icon.equals("🛒")) {
+                btn.addActionListener(ignored -> {
+
+                    new ShoppingCartUI().setVisible(true);
+                });
+            }
+
             topPanel.add(btn);
             btnY += 45;
         }

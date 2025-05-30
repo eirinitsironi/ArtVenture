@@ -2,6 +2,8 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
+
 
 public class ArtistProfilePage {
     public static void open(String artistName) {

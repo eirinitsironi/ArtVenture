@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import backend.User;
-import ui.SearchPanel;
 
 public class UserProfile {
 
@@ -138,10 +137,11 @@ public class UserProfile {
         }
 
         homeButton.addActionListener(e -> {
-            frame.setContentPane(new SearchPanel(frame));
+            frame.setContentPane(new FeedPanel(frame));
             frame.revalidate();
             frame.repaint();
         });
+
 
         frame.add(navBar);
         frame.setLocationRelativeTo(null);

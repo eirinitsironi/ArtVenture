@@ -54,6 +54,36 @@ public class FeedPanel extends JPanel {
                 }
             }
         });
+
+        // Bottom Navigation Bar
+        JPanel navBar = new JPanel(new GridLayout(1, 2));
+        navBar.setBounds(0, 630, 400, 40);
+        navBar.setBackground(new Color(0xC4D2A4)); // Ίδιο χρώμα όπως στο UserProfile
+
+        JButton homeButton = new JButton("🧭");
+        JButton profileButton = new JButton("👤");
+
+        for (JButton btn : new JButton[]{homeButton, profileButton}) {
+            btn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
+            btn.setFocusPainted(false);
+            btn.setBorderPainted(false);
+            btn.setBackground(new Color(0xC4D2A4));
+            btn.setOpaque(true);
+            navBar.add(btn);
+        }
+
+        homeButton.addActionListener(e -> {
+            frame.setContentPane(new FeedPanel(frame));
+            frame.revalidate();
+            frame.repaint();
+        });
+
+        profileButton.addActionListener(e -> {
+            UserProfile.createAndShowGUI();
+            frame.dispose();
+        });
+
+        add(navBar);
     }
 
     private JPanel createCard(String title, boolean isPainting) {
@@ -85,7 +115,7 @@ public class FeedPanel extends JPanel {
         }
 
         JLabel avgLabel = new JLabel("avg");
-        avgLabel.setBounds(270, 90, 30, 20);
+        avgLabel.setBounds(270, 90, 50, 20);
         card.add(avgLabel);
 
         JLabel heart = new JLabel("♡");
@@ -96,31 +126,9 @@ public class FeedPanel extends JPanel {
     }
 
     private void showSearchOverlay(JFrame frame) {
-        JPanel searchOverlay = new JPanel(null);
-        searchOverlay.setBackground(new Color(0xD3DFB7));
-
-        // Back button
-        JButton backButton = new JButton("<");
-        backButton.setBounds(10, 10, 80, 30);
-        backButton.addActionListener((ActionEvent e) -> {
-            frame.setContentPane(new FeedPanel(frame));
-            frame.revalidate();
-            frame.repaint();
-        });
-        searchOverlay.add(backButton);
-
-        // Copy current search field into the new view
-        JTextField searchFieldCopy = new JTextField(searchField.getText());
-        searchFieldCopy.setFont(new Font("Arial", Font.PLAIN, 16));
-        searchFieldCopy.setBounds(20, 60, 350, 40);
-        searchFieldCopy.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true),
-                BorderFactory.createEmptyBorder(10, 15, 10, 15)
-        ));
-        searchOverlay.add(searchFieldCopy);
-
-        frame.setContentPane(searchOverlay);
+        frame.setContentPane(new SearchWindow(frame));
         frame.revalidate();
         frame.repaint();
     }
+
 }

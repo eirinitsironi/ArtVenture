@@ -21,18 +21,57 @@ public class MyWrappedPage {
         mainPanel = new JPanel(cardLayout);
         mainPanel.setBackground(new Color(0xD3DFB7));
 
+        // Προσθήκη welcome panel πρώτου
+        JPanel welcomePanel = createWelcomePanel();
+        mainPanel.add(welcomePanel, "welcome");
+
         JPanel paintingsPanel = createPaintingsPanel();
         mainPanel.add(paintingsPanel, "paintings");
 
         JPanel artistsPanel = createArtistsPanel();
         mainPanel.add(artistsPanel, "artists");
 
-        JPanel museumsPanel = createMuseumsPanel(); // 🔵 Προστέθηκε η καρτέλα μουσείων
-        mainPanel.add(museumsPanel, "museums");     // 🔵
+        JPanel museumsPanel = createMuseumsPanel();
+        mainPanel.add(museumsPanel, "museums");
 
         frame.add(mainPanel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        // Εμφάνιση πρώτα του welcome panel
+        cardLayout.show(mainPanel, "welcome");
+    }
+
+    private static JPanel createWelcomePanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBackground(new Color(0xD3DFB7));
+
+        JLabel title = new JLabel("My wrapped", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 25));
+        title.setBounds(0, 100, 400, 30);
+        panel.add(title);
+
+        JTextArea welcomeMessage = new JTextArea(
+                "Welcome to your wrapped!\n\n" +
+                        "Click start to see your top paintings,\n" +
+                        "artists and museums!"
+        );
+        welcomeMessage.setBounds(50, 150, 300, 100);
+        welcomeMessage.setFont(new Font("Arial", Font.PLAIN, 16));
+        welcomeMessage.setBackground(new Color(0xD3DFB7));
+        welcomeMessage.setEditable(false);
+        welcomeMessage.setFocusable(false);
+        panel.add(welcomeMessage);
+
+        JButton startBtn = new JButton("Start");
+        startBtn.setBounds(150, 300, 100, 40);
+        startBtn.setFont(new Font("Arial", Font.BOLD, 16));
+        startBtn.setBackground(new Color(0xE6E6FA));
+        startBtn.addActionListener(e -> cardLayout.show(mainPanel, "paintings"));
+        panel.add(startBtn);
+
+        return panel;
     }
 
     private static JPanel createPaintingsPanel() {
@@ -90,10 +129,11 @@ public class MyWrappedPage {
             item.add(textWrapper, BorderLayout.CENTER);
 
             String artistNameForClick = artistNames[i];
+            final int index = i;
 
             item.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
-                    ArtistProfilePage.open(artistNameForClick);
+                    PaintingsProfilePage.open(artistNameForClick, index);
                 }
             });
 
@@ -196,7 +236,7 @@ public class MyWrappedPage {
         JButton nextBtn = new JButton("Next");
         nextBtn.setBounds(200, 580, 80, 30);
         nextBtn.setBackground(new Color(0xE6E6FA));
-        nextBtn.addActionListener(ignored -> cardLayout.show(mainPanel, "museums")); // 🔵 Πάει στα μουσεία
+        nextBtn.addActionListener(ignored -> cardLayout.show(mainPanel, "museums"));
         panel.add(nextBtn);
 
         JButton restartBtn = new JButton("🔁 Start Over");
@@ -212,7 +252,7 @@ public class MyWrappedPage {
         return panel;
     }
 
-    private static JPanel createMuseumsPanel() { // 🔵 ΝΕΑ ΜΕΘΟΔΟΣ
+    private static JPanel createMuseumsPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(null);
         panel.setBackground(new Color(0xD3DFB7));
@@ -224,10 +264,10 @@ public class MyWrappedPage {
 
         String[] museumNames = {"The Louvre", "The MET", "Tate Modern", "Van Gogh Museum"};
         String[] imagePaths = {
-                "/ui/resources/museum1.png",
-                "/ui/resources/museum2.png",
-                "/ui/resources/museum3.png",
-                "/ui/resources/museum4.png"
+                "/ui/resources/museum1.jpg",
+                "/ui/resources/museum2.jpg",
+                "/ui/resources/museum3.jpg",
+                "/ui/resources/museum4.jpg"
         };
 
         JPanel listPanel = new JPanel();
@@ -262,7 +302,7 @@ public class MyWrappedPage {
             String museumName = museumNames[i];
             item.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
-                    MuseumProfilePage.open(museumName); // 🔵 Άνοιγμα νέου παραθύρου μουσείου
+                    MuseumProfilePage.open(museumName);
                 }
             });
 

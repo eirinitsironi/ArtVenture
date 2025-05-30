@@ -1,6 +1,8 @@
 package ui;
 import javax.swing.*;
 import java.awt.*;
+import ui.FindVenuesPage;
+
 
 public class MenuPage extends JPanel {
     public MenuPage(JFrame frame) {
@@ -70,6 +72,9 @@ public class MenuPage extends JPanel {
                         break;
                     case "My wrapped":
                         MyWrappedPage.open();
+                        break;
+                    case "Find venues":
+                        FindVenuesPage.open();
                         break;
                     default:
                         JOptionPane.showMessageDialog(frame, "Opening: " + label);

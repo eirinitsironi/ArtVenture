@@ -29,6 +29,6 @@ public class Balance implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Balance: %.2f€", balance);
+        return String.format("Balance: %.2f$", balance);
     }
 }

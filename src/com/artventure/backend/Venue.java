@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Venue {
+    private String id;
     private String name;
     private String address;
     private String contactInfo;
@@ -11,8 +12,8 @@ public class Venue {
     private int capacity;
     private List<LocalDate> availableDates;
 
-
-    public Venue(String name, String address, String contactInfo, double rentingPrice, int capacity, List<LocalDate> availableDates) {
+    public Venue(String id, String name, String address, String contactInfo, double rentingPrice, int capacity, List<LocalDate> availableDates) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.contactInfo = contactInfo;
@@ -21,6 +22,7 @@ public class Venue {
         this.availableDates = availableDates;
     }
 
+    public String getId() { return id; }
     public String getName() { return name; }
     public String getAddress() { return address; }
     public String getContactInfo() { return contactInfo; }
@@ -38,7 +40,7 @@ public class Venue {
 
     @Override
     public String toString() {
-        return name + " | " + address + " | " + rentingPrice + "€ | Cap: " + capacity;
+        return name + " | " + address + " | " + rentingPrice + "$ | Cap: " + capacity;
     }
 }
 

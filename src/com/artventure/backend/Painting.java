@@ -8,8 +8,8 @@ public class Painting extends Post implements Priced, Item {
     private String caption;
     private Artist artist;
 
-    public Painting(String title, String category, String imagePath, String caption, double price) {
-        super(title, category);
+    public Painting(String id, String title, String category, String imagePath, String caption, double price) {
+        super(id, title, category);
         this.imagePath = imagePath;
         this.caption = caption;
         this.price = price;
@@ -53,12 +53,12 @@ public class Painting extends Post implements Priced, Item {
         if (this == o) return true;
         if (!(o instanceof Painting)) return false;
         Painting p = (Painting) o;
-        return Objects.equals(title, p.title);
+        return Objects.equals(id, p.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title);
+        return Objects.hash(id);
     }
 }
 

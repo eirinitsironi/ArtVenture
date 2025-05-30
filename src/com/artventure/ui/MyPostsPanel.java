@@ -1,11 +1,11 @@
 package ui;
 
-import javax.swing.*;
-import java.awt.*;
 import backend.User;
+import java.awt.*;
+import javax.swing.*;
 
 public class MyPostsPanel extends JPanel {
-
+    
     private static final Color BACKGROUND_COLOR = new Color(0xD3DFB7);
     private static final Color NAV_BAR_COLOR = new Color(0xC4D2A4);
 
@@ -25,7 +25,10 @@ public class MyPostsPanel extends JPanel {
         backBtn.setFocusPainted(false);
         backBtn.setBorderPainted(false);
         backBtn.setContentAreaFilled(false);
-        backBtn.addActionListener(e -> frame.dispose());
+        backBtn.addActionListener(e -> {
+            frame.dispose();  // Κλείνει το τρέχον παράθυρο
+            UserProfile.createAndShowGUI();  // Ανοίγει νέο UserProfile
+        });
         topPanel.add(backBtn);
 
         JLabel title = new JLabel("My Posts", SwingConstants.CENTER);

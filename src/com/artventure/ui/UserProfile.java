@@ -136,6 +136,13 @@ public class UserProfile {
             navBar.add(btn);
         }
 
+        homeButton.addActionListener(e -> {
+            frame.setContentPane(new FeedPanel(frame));
+            frame.revalidate();
+            frame.repaint();
+        });
+
+
         frame.add(navBar);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -158,7 +165,7 @@ public class UserProfile {
             button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
             button.addActionListener(ignored ->
-                            JOptionPane.showMessageDialog(menuFrame, "Opening: " + option)
+                    JOptionPane.showMessageDialog(menuFrame, "Opening: " + option)
             );
 
             menuFrame.add(button);

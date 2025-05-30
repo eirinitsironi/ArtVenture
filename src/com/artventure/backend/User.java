@@ -16,12 +16,12 @@ public class User implements Serializable {
     private Cart cart;
     private List<Order> orders;
     private Balance balance;
-    private List<Painting> wishlist;
+    private Wishlist wishlist;
     private List<Museum> visitedMuseums;
     private List<Painting> ratedPaintings;
     private List<Review> reviews;
     private List<Rating> ratings;
-
+    private PurchaseHistory history = new PurchaseHistory();
 
     public User(int userID, String username) {
         this.userID = userID;
@@ -29,18 +29,18 @@ public class User implements Serializable {
         this.posts = new ArrayList<>();
         this.notifications = new ArrayList<>();
         this.pointsActivity = new PointsActivity(userID);
-        this.drawings= new ArrayList<>();
+        this.drawings = new ArrayList<>();
         this.cart = new Cart();
         this.orders = new ArrayList<>();
         this.balance = new Balance(300);
-        this.wishlist = new ArrayList<>();
+        this.wishlist = new Wishlist("wishlist_" + userID, this);
         this.visitedMuseums = new ArrayList<>();
         this.ratedPaintings = new ArrayList<>();
         this.reviews = new ArrayList<>();
         this.ratings = new ArrayList<>();
     }
 
-    //Getters
+    // Getters
     public int getUserID() {
         return userID;
     }
@@ -64,20 +64,15 @@ public class User implements Serializable {
     public Cart getCart() {
         return cart;
     }
-    
+
     public List<Order> getOrders() {
         return orders;
-    }
-    
-    public void addOrder(Order order) {
-        orders.add(order);
     }
 
     public Balance getBalance() {
         return balance;
     }
 
-    //Post related
     public void addPost(Post post) {
         posts.add(post);
     }
@@ -95,7 +90,6 @@ public class User implements Serializable {
         }
     }
 
-    //Notification related
     public void addNotification(Notification n) {
         notifications.add(n);
     }
@@ -123,13 +117,12 @@ public class User implements Serializable {
         }
     }
 
-    //Points related
     public void earnPointsFromQuiz() {
-        pointsActivity.addPoints(5, "Quiz Completion"); 
+        pointsActivity.addPoints(5, "Quiz Completion");
     }
 
     public void earnPointsFromTicketPurchase(double ticketPrice) {
-        int points = (int)(ticketPrice * 0.5);      //0.5 points per euro
+        int points = (int)(ticketPrice * 0.5);
         pointsActivity.addPoints(points, "Ticket Purchase");
     }
 
@@ -140,27 +133,25 @@ public class User implements Serializable {
     public void addDrawing(Drawing drawing) {
         drawings.add(drawing);
     }
-    
+
     public List<Drawing> getDrawings() {
         return drawings;
     }
 
-    //Review related
     public void addReview(Review review) {
         reviews.add(review);
     }
+
     public List<Review> getReviews() {
         return reviews;
     }
 
-    //Wrapped related
-    // Wishlist
-    public List<Painting> getWishlist() {
+    public Wishlist getWishlist() {
         return wishlist;
     }
 
-    public void addToWishlist(Painting painting) {
-        wishlist.add(painting);
+    public void setWishlist(Wishlist wishlist) {
+        this.wishlist = wishlist;
     }
 
     // Visited Museums
@@ -184,22 +175,39 @@ public class User implements Serializable {
     public void ratePost(Painting painting, float rating) {
         for (Rating r : ratings) {
             if (r.getPost().equals(painting)) {
-                r.setRating(rating);        //ενημέρωση υπάρχουσας βαθμολογίας
+                r.setRating(rating);
                 return;
             }
         }
-    int newReviewID = ratings.size() + 1; 
-    ratings.add(new Rating(newReviewID, this, painting, rating));
+        int newReviewID = ratings.size() + 1;
+        ratings.add(new Rating(newReviewID, this, painting, rating));
     }
 
     public float getRatingFor(Painting painting) {
-    for (Rating r : ratings) {
-        if (r.getPost().equals(painting)) {
-            return r.getRating();
+        for (Rating r : ratings) {
+            if (r.getPost().equals(painting)) {
+                return r.getRating();
+            }
+        }
+        return 0.0f;
+    }
+
+    public void addToWishlist(Painting painting) {
+    if (painting != null) {
+        WishlistItem item = new WishlistItem(painting.getId(), "Painting", painting);
+        wishlist.addItem(item);
         }
     }
-    return 0.0f; 
+
+   public void addOrder(Order order) {
+    orders.add(order);
+    history.addOrder(order);
     }
+
+public PurchaseHistory getPurchaseHistory() {
+    return history;
+    }
+
 }
 
 
